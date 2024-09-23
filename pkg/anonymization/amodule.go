@@ -65,6 +65,10 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 	}
 
 	// TODO: add the encapsulation part
+	if encapsulateDst != "" {
+		ret.encapsulateDst = encapsulateDst
+		ret.hasEncapsulateDst = true
+	}
 
 	ret.loopTime = loopTime
 	if ret.loopTime != 0 {
