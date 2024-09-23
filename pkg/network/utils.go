@@ -6,11 +6,13 @@ import (
 	// log "github.com/sirupsen/logrus"
 )
 
-// privateIPBlocks is an array of IP ranges used to tell if a given IP falls within an RFC1918 or loopback range
-var privateIPBlocks []*net.IPNet
+func ParseIP(ip string) (net.IP, *net.IPNet, error) {
+	return net.ParseCIDR(ip)
+}
 
 // CIDRinit fills privateIPBlocks with the CIDR ranges for RFC1918 and loopback checking
-func CIDRinit() {
+func CIDRAllInit() []*net.IPNet {
+	var privateIPBlocks []*net.IPNet
 	for _, cidr := range []string{
 		"127.0.0.0/8",    // IPv4 loopback
 		"10.0.0.0/8",     // RFC1918
@@ -22,10 +24,25 @@ func CIDRinit() {
 		_, block, _ := net.ParseCIDR(cidr)
 		privateIPBlocks = append(privateIPBlocks, block)
 	}
+	return privateIPBlocks
+}
+
+func CIDRIPv4Init() []*net.IPNet {
+	var privateIPBlocks []*net.IPNet
+	for _, cidr := range []string{
+		"127.0.0.0/8",    // IPv4 loopback
+		"10.0.0.0/8",     // RFC1918
+		"172.16.0.0/12",  // RFC1918
+		"192.168.0.0/16", // RFC1918
+	} {
+		_, block, _ := net.ParseCIDR(cidr)
+		privateIPBlocks = append(privateIPBlocks, block)
+	}
+	return privateIPBlocks
 }
 
 // isPrivateIP checks whether a net.IP is within the ranges in privateIPBlocks
-func isPrivateIP(ip net.IP) bool {
+func IsPrivateIP(privateIPBlocks []*net.IPNet, ip net.IP) bool {
 	for _, block := range privateIPBlocks {
 		if block.Contains(ip) {
 			return true

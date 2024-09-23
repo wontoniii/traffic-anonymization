@@ -42,9 +42,6 @@ func (tp *Reader) parseIpV4Layer(ip *layers.IPv4) (int64, string, string, bool, 
 	ipDataLen = int64(ip.Length - 4*uint16(ip.IHL))
 	srcIp = ip.SrcIP.String()
 	dstIp = ip.DstIP.String()
-	if IsRFC1918(ip.DstIP) && IsRFC1918(ip.SrcIP) {
-		isLocal = true
-	}
 
 	return ipDataLen, srcIp, dstIp, isLocal, nil
 }
@@ -78,9 +75,6 @@ func (tp *Reader) Parse(wg *sync.WaitGroup, stop chan struct{}) {
 	// isValid is a flag used to tell the worker whether or not to process the information in a packet
 	var isValid bool
 	var parsingErr error
-
-	// initialize the CIDR IP range slice
-	CIDRinit()
 
 	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.Payload)
 	decoded := []gopacket.LayerType{}
