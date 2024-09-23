@@ -1,0 +1,788 @@
+ip access-list ZOOM-TRAFFIC-ONLY
+ permit tcp any 3.7.35.0/25 eq 443 8801 8802
+ permit tcp any 3.21.137.128/25 eq 443 8801 8802
+ permit tcp any 3.22.11.0/24 eq 443 8801 8802
+ permit tcp any 3.23.93.0/24 eq 443 8801 8802
+ permit tcp any 3.25.41.128/25 eq 443 8801 8802
+ permit tcp any 3.25.42.0/25 eq 443 8801 8802
+ permit tcp any 3.25.49.0/24 eq 443 8801 8802
+ permit tcp any 3.80.20.128/25 eq 443 8801 8802
+ permit tcp any 3.96.19.0/24 eq 443 8801 8802
+ permit tcp any 3.101.32.128/25 eq 443 8801 8802
+ permit tcp any 3.101.52.0/25 eq 443 8801 8802
+ permit tcp any 3.104.34.128/25  eq 443 8801 8802
+ permit tcp any 3.120.121.0/25 eq 443 8801 8802
+ permit tcp any 3.127.194.128/25 eq 443 8801 8802
+ permit tcp any 3.208.72.0/25 eq 443 8801 8802
+ permit tcp any 3.211.241.0/25 eq 443 8801 8802
+ permit tcp any 3.235.69.0/25 eq 443 8801 8802
+ permit tcp any 3.235.82.0/23 eq 443 8801 8802
+ permit tcp any 3.235.71.128/25 eq 443 8801 8802
+ permit tcp any 3.235.72.128/25 eq 443 8801 8802
+ permit tcp any 3.235.73.0/25 eq 443 8801 8802
+ permit tcp any 3.235.96.0/23 eq 443 8801 8802
+ permit tcp any 4.34.125.128/25 eq 443 8801 8802
+ permit tcp any 4.35.64.128/25 eq 443 8801 8802
+ permit tcp any 8.5.128.0/23 eq 443 8801 8802
+ permit tcp any 13.52.6.128/25 eq 443 8801 8802
+ permit tcp any 13.52.146.0/25 eq 443 8801 8802
+ permit tcp any 18.157.88.0/24 eq 443 8801 8802
+ permit tcp any 18.205.93.128/25 eq 443 8801 8802
+ permit tcp any 20.203.158.80/28 eq 443 8801 8802
+ permit tcp any 20.203.190.192/26 eq 443 8801 8802
+ permit tcp any 50.239.202.0/23 eq 443 8801 8802
+ permit tcp any 50.239.204.0/24 eq 443 8801 8802
+ permit tcp any 52.61.100.128/25 eq 443 8801 8802
+ permit tcp any 52.202.62.192/26 eq 443 8801 8802
+ permit tcp any 52.215.168.0/25 eq 443 8801 8802
+ permit tcp any 64.125.62.0/24 eq 443 8801 8802
+ permit tcp any 64.211.144.0/24 eq 443 8801 8802
+ permit tcp any 64.224.32.0/19 eq 443 8801 8802
+ permit tcp any 65.39.152.0/24 eq 443 8801 8802
+ permit tcp any 69.174.57.0/24 eq 443 8801 8802
+ permit tcp any 69.174.108.0/22 eq 443 8801 8802
+ permit tcp any 99.79.20.0/25 eq 443 8801 8802
+ permit tcp any 101.36.167.0/24 eq 443 8801 8802
+ permit tcp any 103.122.166.0/23 eq 443 8801 8802
+ permit tcp any 111.33.115.0/25 eq 443 8801 8802
+ permit tcp any 111.33.181.0/25 eq 443 8801 8802
+ permit tcp any 115.110.154.192/26  eq 443 8801 8802
+ permit tcp any 115.114.56.192/26 eq 443 8801 8802
+ permit tcp any 115.114.115.0/26  eq 443 8801 8802
+ permit tcp any 115.114.131.0/26 eq 443 8801 8802
+ permit tcp any 120.29.148.0/24 eq 443 8801 8802
+ permit tcp any 129.151.0.0/19 eq 443 8801 8802
+ permit tcp any 129.151.40.0/22 eq 443 8801 8802
+ permit tcp any 129.151.48.0/20 eq 443 8801 8802
+ permit tcp any 129.159.0.0/20 eq 443 8801 8802
+ permit tcp any 129.159.160.0/19 eq 443 8801 8802
+ permit tcp any 129.159.208.0/20 eq 443 8801 8802
+ permit tcp any 130.61.164.0/22 eq 443 8801 8802
+ permit tcp any 134.224.0.0/16 eq 443 8801 8802
+ permit tcp any 140.238.128.0/24 eq 443 8801 8802
+ permit tcp any 140.238.232.0/22 eq 443 8801 8802
+ permit tcp any 144.195.0.0/16 eq 443 8801 8802
+ permit tcp any 147.124.96.0/19 eq 443 8801 8802
+ permit tcp any 149.137.0.0/17 eq 443 8801 8802
+ permit tcp any 150.230.224.0/21 eq 443 8801 8802
+ permit tcp any 152.67.20.0/24 eq 443 8801 8802
+ permit tcp any 152.67.118.0/24 eq 443 8801 8802
+ permit tcp any 152.67.168.0/22 eq 443 8801 8802
+ permit tcp any 152.67.180.0/24 eq 443 8801 8802
+ permit tcp any 152.67.184.0/22 eq 443 8801 8802
+ permit tcp any 152.67.240.0/21 eq 443 8801 8802
+ permit tcp any 152.70.224.0/21 eq 443 8801 8802
+ permit tcp any 156.45.0.0/17 eq 443 8801 8802
+ permit tcp any 158.101.64.0/24 eq 443 8801 8802
+ permit tcp any 158.101.184.0/22 eq 443 8801 8802
+ permit tcp any 160.1.56.128/25 eq 443 8801 8802
+ permit tcp any 161.199.136.0/22 eq 443 8801 8802
+ permit tcp any 162.12.232.0/22 eq 443 8801 8802
+ permit tcp any 162.255.36.0/22 eq 443 8801 8802
+ permit tcp any 165.254.88.0/23 eq 443 8801 8802
+ permit tcp any 166.108.64.0/18 eq 443 8801 8802
+ permit tcp any 168.138.16.0/22 eq 443 8801 8802
+ permit tcp any 168.138.48.0/24 eq 443 8801 8802
+ permit tcp any 168.138.56.0/21 eq 443 8801 8802
+ permit tcp any 168.138.72.0/24 eq 443 8801 8802
+ permit tcp any 168.138.74.0/25 eq 443 8801 8802
+ permit tcp any 168.138.80.0/21 eq 443 8801 8802
+ permit tcp any 168.138.96.0/22 eq 443 8801 8802
+ permit tcp any 168.138.116.0/22 eq 443 8801 8802
+ permit tcp any 168.138.244.0/24 eq 443 8801 8802
+ permit tcp any 170.114.0.0/16 eq 443 8801 8802
+ permit tcp any 173.231.80.0/20 eq 443 8801 8802
+ permit tcp any 192.204.12.0/22 eq 443 8801 8802
+ permit tcp any 193.122.16.0/20 eq 443 8801 8802
+ permit tcp any 193.122.32.0/20 eq 443 8801 8802
+ permit tcp any 193.122.208.0/20 eq 443 8801 8802
+ permit tcp any 193.122.224.0/20 eq 443 8801 8802
+ permit tcp any 193.122.240.0/20 eq 443 8801 8802
+ permit tcp any 193.123.0.0/19 eq 443 8801 8802
+ permit tcp any 193.123.40.0/21 eq 443 8801 8802
+ permit tcp any 193.123.128.0/19 eq 443 8801 8802
+ permit tcp any 193.123.168.0/21 eq 443 8801 8802
+ permit tcp any 193.123.192.0/19 eq 443 8801 8802
+ permit tcp any 198.251.128.0/17 eq 443 8801 8802
+ permit tcp any 202.177.207.128/27 eq 443 8801 8802
+ permit tcp any 204.80.104.0/21 eq 443 8801 8802
+ permit tcp any 204.141.28.0/22 eq 443 8801 8802
+ permit tcp any 206.247.0.0/16 eq 443 8801 8802
+ permit tcp any 207.226.132.0/24 eq 443 8801 8802
+ permit tcp any 209.9.211.0/24 eq 443 8801 8802
+ permit tcp any 209.9.215.0/24 eq 443 8801 8802
+ permit tcp any 213.19.144.0/24 eq 443 8801 8802
+ permit tcp any 213.19.153.0/24 eq 443 8801 8802
+ permit tcp any 213.244.140.0/24 eq 443 8801 8802
+ permit tcp any 221.122.88.64/27 eq 443 8801 8802
+ permit tcp any 221.122.88.128/25 eq 443 8801 8802
+ permit tcp any 221.122.89.128/25 eq 443 8801 8802
+ permit tcp any 221.123.139.192/27 eq 443 8801 8802
+permit udp any  3.7.35.0/25 range 8801 8810
+permit udp any  3.21.137.128/25 range 8801 8810
+permit udp any  3.22.11.0/24 range 8801 8810
+permit udp any  3.23.93.0/24 range 8801 8810
+permit udp any  3.25.41.128/25  range 8801 8810
+permit udp any  3.25.42.0/25 range 8801 8810
+permit udp any  3.25.49.0/24 range 8801 8810
+permit udp any  3.80.20.128/25 range 8801 8810
+permit udp any  3.96.19.0/24 range 8801 8810
+permit udp any  3.101.32.128/25 range 8801 8810
+permit udp any  3.101.52.0/25 range 8801 8810
+permit udp any  3.104.34.128/25 range 8801 8810
+permit udp any  3.120.121.0/25 range 8801 8810
+permit udp any  3.127.194.128/25 range 8801 8810
+permit udp any  3.208.72.0/25 range 8801 8810
+permit udp any  3.211.241.0/25 range 8801 8810
+permit udp any  3.235.69.0/25 range 8801 8810
+permit udp any  3.235.82.0/23 range 8801 8810
+permit udp any  3.235.71.128/25 range 8801 8810
+permit udp any  3.235.72.128/25 range 8801 8810
+permit udp any  3.235.73.0/25 range 8801 8810
+permit udp any  3.235.96.0/23 range 8801 8810
+permit udp any  4.34.125.128/25 range 8801 8810
+permit udp any  4.35.64.128/25 range 8801 8810
+permit udp any  8.5.128.0/23 range 8801 8810
+permit udp any  13.52.6.128/25 range 8801 8810
+permit udp any  13.52.146.0/25 range 8801 8810
+permit udp any  18.157.88.0/24 range 8801 8810
+permit udp any  18.205.93.128/25 range 8801 8810
+permit udp any  20.203.158.80/28 range 8801 8810
+permit udp any  20.203.190.192/26 range 8801 8810
+permit udp any  50.239.202.0/23 range 8801 8810
+permit udp any  50.239.204.0/24 range 8801 8810
+permit udp any  52.61.100.128/25 range 8801 8810
+permit udp any  52.202.62.192/26 range 8801 8810
+permit udp any  52.215.168.0/25 range 8801 8810
+permit udp any  64.125.62.0/24 range 8801 8810
+permit udp any  64.211.144.0/24 range 8801 8810
+permit udp any  64.224.32.0/19 range 8801 8810
+permit udp any  65.39.152.0/24 range 8801 8810
+permit udp any  69.174.57.0/24 range 8801 8810
+permit udp any  69.174.108.0/22 range 8801 8810
+permit udp any  99.79.20.0/25 range 8801 8810
+permit udp any  101.36.167.0/24 range 8801 8810
+permit udp any  103.122.166.0/23 range 8801 8810
+permit udp any  111.33.115.0/25 range 8801 8810
+permit udp any  111.33.181.0/25 range 8801 8810
+permit udp any  115.110.154.192/26 range 8801 8810  
+permit udp any  115.114.56.192/26 range 8801 8810
+permit udp any  115.114.115.0/26  range 8801 8810
+permit udp any  115.114.131.0/26 range 8801 8810
+permit udp any  120.29.148.0/24 range 8801 8810
+permit udp any  129.151.0.0/19 range 8801 8810
+permit udp any  129.151.40.0/22 range 8801 8810
+permit udp any  129.151.48.0/20 range 8801 8810
+permit udp any  129.159.0.0/20 range 8801 8810
+permit udp any  129.159.160.0/19 range 8801 8810
+permit udp any  129.159.208.0/20 range 8801 8810
+permit udp any  130.61.164.0/22 range 8801 8810
+permit udp any  134.224.0.0/16 range 8801 8810
+permit udp any  140.238.128.0/24 range 8801 8810
+permit udp any  140.238.232.0/22 range 8801 8810
+permit udp any  144.195.0.0/16 range 8801 8810
+permit udp any  147.124.96.0/19 range 8801 8810
+permit udp any  149.137.0.0/17 range 8801 8810
+permit udp any  150.230.224.0/21 range 8801 8810
+permit udp any  152.67.20.0/24 range 8801 8810
+permit udp any  152.67.118.0/24 range 8801 8810
+permit udp any  152.67.168.0/22 range 8801 8810
+permit udp any  152.67.180.0/24 range 8801 8810
+permit udp any  152.67.184.0/22 range 8801 8810
+permit udp any  152.67.240.0/21 range 8801 8810
+permit udp any  152.70.224.0/21 range 8801 8810
+permit udp any  156.45.0.0/17 range 8801 8810
+permit udp any  158.101.64.0/24 range 8801 8810
+permit udp any  158.101.184.0/22 range 8801 8810
+permit udp any  160.1.56.128/25 range 8801 8810
+permit udp any  161.199.136.0/22 range 8801 8810
+permit udp any  162.12.232.0/22 range 8801 8810
+permit udp any  162.255.36.0/22 range 8801 8810
+permit udp any  165.254.88.0/23 range 8801 8810
+permit udp any  166.108.64.0/18 range 8801 8810
+permit udp any  168.138.16.0/22 range 8801 8810
+permit udp any  168.138.48.0/24 range 8801 8810
+permit udp any  168.138.56.0/21 range 8801 8810
+permit udp any  168.138.72.0/24 range 8801 8810
+permit udp any  168.138.74.0/25 range 8801 8810
+permit udp any  168.138.80.0/21 range 8801 8810
+permit udp any  168.138.96.0/22  range 8801 8810
+permit udp any  168.138.116.0/22 range 8801 8810
+permit udp any  168.138.244.0/24 range 8801 8810
+permit udp any  170.114.0.0/16 range 8801 8810
+permit udp any  173.231.80.0/20 range 8801 8810
+permit udp any  192.204.12.0/22 range 8801 8810
+permit udp any  193.122.16.0/20 range 8801 8810
+permit udp any  193.122.32.0/20 range 8801 8810
+permit udp any  193.122.208.0/20 range 8801 8810
+permit udp any  193.122.224.0/20 range 8801 8810
+permit udp any  193.122.240.0/20 range 8801 8810
+permit udp any  193.123.0.0/19 range 8801 8810
+permit udp any  193.123.40.0/21 range 8801 8810
+permit udp any  193.123.128.0/19 range 8801 8810
+permit udp any  193.123.168.0/21 range 8801 8810
+permit udp any  193.123.192.0/19 range 8801 8810
+permit udp any  198.251.128.0/17 range 8801 8810
+permit udp any  202.177.207.128/27 range 8801 8810
+permit udp any  204.80.104.0/21 range 8801 8810
+permit udp any  204.141.28.0/22 range 8801 8810
+permit udp any  206.247.0.0/16 range 8801 8810
+permit udp any  207.226.132.0/24 range 8801 8810
+permit udp any  209.9.211.0/24 range 8801 8810
+permit udp any  209.9.215.0/24 range 8801 8810
+permit udp any  213.19.144.0/24 range 8801 8810
+permit udp any  213.19.153.0/24 range 8801 8810
+permit udp any  213.244.140.0/24 range 8801 8810
+permit udp any  221.122.88.64/27 range 8801 8810
+permit udp any  221.122.88.128/25 range 8801 8810
+permit udp any  221.122.89.128/25 range 8801 8810
+permit udp any  221.123.139.192/27 range 8801 8810
+permit udp any  3.7.35.0/25 eq 3478 3479 
+permit udp any  3.21.137.128/25 eq 3478 3479 
+permit udp any  3.22.11.0/24 eq 3478 3479 
+permit udp any  3.23.93.0/24 eq 3478 3479 
+permit udp any  3.25.41.128/25  eq 3478 3479 
+permit udp any  3.25.42.0/25 eq 3478 3479 
+permit udp any  3.25.49.0/24 eq 3478 3479 
+permit udp any  3.80.20.128/25 eq 3478 3479 
+permit udp any  3.96.19.0/24 eq 3478 3479 
+permit udp any  3.101.32.128/25 eq 3478 3479 
+permit udp any  3.101.52.0/25 eq 3478 3479 
+permit udp any  3.104.34.128/25 eq 3478 3479 
+permit udp any  3.120.121.0/25 eq 3478 3479 
+permit udp any  3.127.194.128/25 eq 3478 3479 
+permit udp any  3.208.72.0/25 eq 3478 3479 
+permit udp any  3.211.241.0/25 eq 3478 3479 
+permit udp any  3.235.69.0/25 eq 3478 3479 
+permit udp any  3.235.82.0/23 eq 3478 3479 
+permit udp any  3.235.71.128/25 eq 3478 3479 
+permit udp any  3.235.72.128/25 eq 3478 3479 
+permit udp any  3.235.73.0/25 eq 3478 3479 
+permit udp any  3.235.96.0/23 eq 3478 3479 
+permit udp any  4.34.125.128/25 eq 3478 3479 
+permit udp any  4.35.64.128/25 eq 3478 3479 
+permit udp any  8.5.128.0/23 eq 3478 3479 
+permit udp any  13.52.6.128/25 eq 3478 3479 
+permit udp any  13.52.146.0/25 eq 3478 3479 
+permit udp any  18.157.88.0/24 eq 3478 3479 
+permit udp any  18.205.93.128/25 eq 3478 3479 
+permit udp any  20.203.158.80/28 eq 3478 3479 
+permit udp any  20.203.190.192/26 eq 3478 3479 
+permit udp any  50.239.202.0/23 eq 3478 3479 
+permit udp any  50.239.204.0/24 eq 3478 3479 
+permit udp any  52.61.100.128/25 eq 3478 3479 
+permit udp any  52.202.62.192/26 eq 3478 3479 
+permit udp any  52.215.168.0/25 eq 3478 3479 
+permit udp any  64.125.62.0/24 eq 3478 3479 
+permit udp any  64.211.144.0/24 eq 3478 3479 
+permit udp any  64.224.32.0/19 eq 3478 3479 
+permit udp any  65.39.152.0/24 eq 3478 3479 
+permit udp any  69.174.57.0/24 eq 3478 3479 
+permit udp any  69.174.108.0/22 eq 3478 3479 
+permit udp any  99.79.20.0/25 eq 3478 3479 
+permit udp any  101.36.167.0/24 eq 3478 3479 
+permit udp any  103.122.166.0/23 eq 3478 3479 
+permit udp any  111.33.115.0/25 eq 3478 3479 
+permit udp any  111.33.181.0/25 eq 3478 3479 
+permit udp any  115.110.154.192/26 eq 3478 3479   
+permit udp any  115.114.56.192/26 eq 3478 3479 
+permit udp any  115.114.115.0/26  eq 3478 3479 
+permit udp any  115.114.131.0/26 eq 3478 3479 
+permit udp any  120.29.148.0/24 eq 3478 3479 
+permit udp any  129.151.0.0/19 eq 3478 3479 
+permit udp any  129.151.40.0/22 eq 3478 3479 
+permit udp any  129.151.48.0/20 eq 3478 3479 
+permit udp any  129.159.0.0/20 eq 3478 3479 
+permit udp any  129.159.160.0/19 eq 3478 3479 
+permit udp any  129.159.208.0/20 eq 3478 3479 
+permit udp any  130.61.164.0/22 eq 3478 3479 
+permit udp any  134.224.0.0/16 eq 3478 3479 
+permit udp any  140.238.128.0/24 eq 3478 3479 
+permit udp any  140.238.232.0/22 eq 3478 3479 
+permit udp any  144.195.0.0/16 eq 3478 3479 
+permit udp any  147.124.96.0/19 eq 3478 3479 
+permit udp any  149.137.0.0/17 eq 3478 3479 
+permit udp any  150.230.224.0/21 eq 3478 3479 
+permit udp any  152.67.20.0/24 eq 3478 3479 
+permit udp any  152.67.118.0/24 eq 3478 3479 
+permit udp any  152.67.168.0/22 eq 3478 3479 
+permit udp any  152.67.180.0/24 eq 3478 3479 
+permit udp any  152.67.184.0/22 eq 3478 3479 
+permit udp any  152.67.240.0/21 eq 3478 3479 
+permit udp any  152.70.224.0/21 eq 3478 3479 
+permit udp any  156.45.0.0/17 eq 3478 3479 
+permit udp any  158.101.64.0/24 eq 3478 3479 
+permit udp any  158.101.184.0/22 eq 3478 3479 
+permit udp any  160.1.56.128/25 eq 3478 3479 
+permit udp any  161.199.136.0/22 eq 3478 3479 
+permit udp any  162.12.232.0/22 eq 3478 3479 
+permit udp any  162.255.36.0/22 eq 3478 3479 
+permit udp any  165.254.88.0/23 eq 3478 3479 
+permit udp any  166.108.64.0/18 eq 3478 3479 
+permit udp any  168.138.16.0/22 eq 3478 3479 
+permit udp any  168.138.48.0/24 eq 3478 3479 
+permit udp any  168.138.56.0/21 eq 3478 3479 
+permit udp any  168.138.72.0/24 eq 3478 3479 
+permit udp any  168.138.74.0/25 eq 3478 3479 
+permit udp any  168.138.80.0/21 eq 3478 3479 
+permit udp any  168.138.96.0/22  eq 3478 3479 
+permit udp any  168.138.116.0/22 eq 3478 3479 
+permit udp any  168.138.244.0/24 eq 3478 3479 
+permit udp any  170.114.0.0/16 eq 3478 3479 
+permit udp any  173.231.80.0/20 eq 3478 3479 
+permit udp any  192.204.12.0/22 eq 3478 3479 
+permit udp any  193.122.16.0/20 eq 3478 3479 
+permit udp any  193.122.32.0/20 eq 3478 3479 
+permit udp any  193.122.208.0/20 eq 3478 3479 
+permit udp any  193.122.224.0/20 eq 3478 3479 
+permit udp any  193.122.240.0/20 eq 3478 3479 
+permit udp any  193.123.0.0/19 eq 3478 3479 
+permit udp any  193.123.40.0/21 eq 3478 3479 
+permit udp any  193.123.128.0/19 eq 3478 3479 
+permit udp any  193.123.168.0/21 eq 3478 3479 
+permit udp any  193.123.192.0/19 eq 3478 3479 
+permit udp any  198.251.128.0/17 eq 3478 3479 
+permit udp any  202.177.207.128/27 eq 3478 3479 
+permit udp any  204.80.104.0/21 eq 3478 3479 
+permit udp any  204.141.28.0/22 eq 3478 3479 
+permit udp any  206.247.0.0/16 eq 3478 3479 
+permit udp any  207.226.132.0/24 eq 3478 3479 
+permit udp any  209.9.211.0/24 eq 3478 3479 
+permit udp any  209.9.215.0/24 eq 3478 3479 
+permit udp any  213.19.144.0/24 eq 3478 3479 
+permit udp any  213.19.153.0/24 eq 3478 3479 
+permit udp any  213.244.140.0/24 eq 3478 3479 
+permit udp any  221.122.88.64/27 eq 3478 3479 
+permit udp any  221.122.88.128/25 eq 3478 3479 
+permit udp any  221.122.89.128/25 eq 3478 3479 
+permit udp any  221.123.139.192/27 eq 3478 3479 
+permit tcp any 8.5.128.0/24 eq 5091
+ permit tcp any 64.211.144.0/24  eq 5091
+ permit tcp any 65.39.152.0/24  eq 5091
+ permit tcp any 69.174.57.0/24  eq 5091
+ permit tcp any 101.36.167.0/24  eq 5091
+ permit tcp any 103.122.166.0/23  eq 5091
+ permit tcp any 120.29.148.0/24  eq 5091
+ permit tcp any 147.124.96.0/19  eq 5091
+ permit tcp any 149.137.0.0/17  eq 5091
+ permit tcp any 162.12.232.0/22  eq 5091
+ permit tcp any 173.231.92.0/24  eq 5091
+ permit tcp any 173.231.94.0/24  eq 5091
+ permit tcp any 192.204.12.0/22  eq 5091
+ permit tcp any 209.9.215.0/24  eq 5091
+ permit tcp any 213.19.144.0/24  eq 5091
+ permit tcp any 213.19.153.0/24  eq 5091
+ permit tcp any 213.244.140.0/24  eq 5091
+ permit tcp any 3.21.137.128/25 eq 390
+ permit tcp any 3.235.96.0/23 eq 390
+ permit udp any 64.211.144.0/24 range 20000 64000
+ permit udp any 65.39.152.0/24 range 20000 64000
+ permit udp any 69.174.57.0/24 range 20000 64000
+ permit udp any 101.36.167.0/24 range 20000 64000
+ permit udp any 103.122.166.0/23 range 20000 64000
+ permit udp any 147.124.96.0/19 range 20000 64000
+ permit udp any 149.137.0.0/17 range 20000 64000
+ permit udp any 162.12.232.0/22 range 20000 64000
+ permit udp any 173.231.92.0/24 range 20000 64000
+ permit udp any 173.231.94.0/24 range 20000 64000
+ permit udp any 207.226.132.0/24 range 20000 64000
+ permit udp any 209.9.211.0/24 range 20000 64000
+ permit udp any 213.19.144.0/24  range 20000 64000
+ permit udp any 213.244.140.0/24 range 20000 64000
+ remark return traffic
+  permit tcp 3.7.35.0/25 eq 443 8801 8802         any
+ permit tcp 3.21.137.128/25 eq 443 8801 8802     any
+ permit tcp 3.22.11.0/24 eq 443 8801 8802     any
+ permit tcp 3.23.93.0/24 eq 443 8801 8802     any
+ permit tcp 3.25.41.128/25 eq 443 8801 8802     any
+ permit tcp 3.25.42.0/25 eq 443 8801 8802     any
+ permit tcp 3.25.49.0/24 eq 443 8801 8802     any
+ permit tcp 3.80.20.128/25 eq 443 8801 8802     any
+ permit tcp 3.96.19.0/24 eq 443 8801 8802     any
+ permit tcp 3.101.32.128/25 eq 443 8801 8802     any
+ permit tcp 3.101.52.0/25 eq 443 8801 8802     any
+ permit tcp 3.104.34.128/25  eq 443 8801 8802     any
+ permit tcp 3.120.121.0/25 eq 443 8801 8802     any
+ permit tcp 3.127.194.128/25 eq 443 8801 8802     any
+ permit tcp 3.208.72.0/25 eq 443 8801 8802     any
+ permit tcp 3.211.241.0/25 eq 443 8801 8802     any
+ permit tcp 3.235.69.0/25 eq 443 8801 8802     any
+ permit tcp 3.235.82.0/23 eq 443 8801 8802     any
+ permit tcp 3.235.71.128/25 eq 443 8801 8802     any
+ permit tcp 3.235.72.128/25 eq 443 8801 8802     any
+ permit tcp 3.235.73.0/25 eq 443 8801 8802     any
+ permit tcp 3.235.96.0/23 eq 443 8801 8802     any
+ permit tcp 4.34.125.128/25 eq 443 8801 8802     any
+ permit tcp 4.35.64.128/25 eq 443 8801 8802     any
+ permit tcp 8.5.128.0/23 eq 443 8801 8802     any
+ permit tcp 13.52.6.128/25 eq 443 8801 8802     any
+ permit tcp 13.52.146.0/25 eq 443 8801 8802     any
+ permit tcp 18.157.88.0/24 eq 443 8801 8802     any
+ permit tcp 18.205.93.128/25 eq 443 8801 8802     any
+ permit tcp 20.203.158.80/28 eq 443 8801 8802     any
+ permit tcp 20.203.190.192/26 eq 443 8801 8802     any
+ permit tcp 50.239.202.0/23 eq 443 8801 8802     any
+ permit tcp 50.239.204.0/24 eq 443 8801 8802     any
+ permit tcp 52.61.100.128/25 eq 443 8801 8802     any
+ permit tcp 52.202.62.192/26 eq 443 8801 8802     any
+ permit tcp 52.215.168.0/25 eq 443 8801 8802     any
+ permit tcp 64.125.62.0/24 eq 443 8801 8802     any
+ permit tcp 64.211.144.0/24 eq 443 8801 8802     any
+ permit tcp 64.224.32.0/19 eq 443 8801 8802     any
+ permit tcp 65.39.152.0/24 eq 443 8801 8802     any
+ permit tcp 69.174.57.0/24 eq 443 8801 8802     any
+ permit tcp 69.174.108.0/22 eq 443 8801 8802     any
+ permit tcp 99.79.20.0/25 eq 443 8801 8802     any
+ permit tcp 101.36.167.0/24 eq 443 8801 8802     any
+ permit tcp 103.122.166.0/23 eq 443 8801 8802     any
+ permit tcp 111.33.115.0/25 eq 443 8801 8802     any
+ permit tcp 111.33.181.0/25 eq 443 8801 8802     any
+ permit tcp 115.110.154.192/26  eq 443 8801 8802     any
+ permit tcp 115.114.56.192/26 eq 443 8801 8802     any
+ permit tcp 115.114.115.0/26  eq 443 8801 8802     any
+ permit tcp 115.114.131.0/26 eq 443 8801 8802     any
+ permit tcp 120.29.148.0/24 eq 443 8801 8802     any
+ permit tcp 129.151.0.0/19 eq 443 8801 8802     any
+ permit tcp 129.151.40.0/22 eq 443 8801 8802     any
+ permit tcp 129.151.48.0/20 eq 443 8801 8802     any
+ permit tcp 129.159.0.0/20 eq 443 8801 8802     any
+ permit tcp 129.159.160.0/19 eq 443 8801 8802     any
+ permit tcp 129.159.208.0/20 eq 443 8801 8802     any
+ permit tcp 130.61.164.0/22 eq 443 8801 8802     any
+ permit tcp 134.224.0.0/16 eq 443 8801 8802     any
+ permit tcp 140.238.128.0/24 eq 443 8801 8802     any
+ permit tcp 140.238.232.0/22 eq 443 8801 8802     any
+ permit tcp 144.195.0.0/16 eq 443 8801 8802     any
+ permit tcp 147.124.96.0/19 eq 443 8801 8802     any
+ permit tcp 149.137.0.0/17 eq 443 8801 8802     any
+ permit tcp 150.230.224.0/21 eq 443 8801 8802     any
+ permit tcp 152.67.20.0/24 eq 443 8801 8802     any
+ permit tcp 152.67.118.0/24 eq 443 8801 8802     any
+ permit tcp 152.67.168.0/22 eq 443 8801 8802     any
+ permit tcp 152.67.180.0/24 eq 443 8801 8802     any
+ permit tcp 152.67.184.0/22 eq 443 8801 8802     any
+ permit tcp 152.67.240.0/21 eq 443 8801 8802     any
+ permit tcp 152.70.224.0/21 eq 443 8801 8802     any
+ permit tcp 156.45.0.0/17 eq 443 8801 8802     any
+ permit tcp 158.101.64.0/24 eq 443 8801 8802     any
+ permit tcp 158.101.184.0/22 eq 443 8801 8802     any
+ permit tcp 160.1.56.128/25 eq 443 8801 8802     any
+ permit tcp 161.199.136.0/22 eq 443 8801 8802     any
+ permit tcp 162.12.232.0/22 eq 443 8801 8802     any
+ permit tcp 162.255.36.0/22 eq 443 8801 8802     any
+ permit tcp 165.254.88.0/23 eq 443 8801 8802     any
+ permit tcp 166.108.64.0/18 eq 443 8801 8802     any
+ permit tcp 168.138.16.0/22 eq 443 8801 8802     any
+ permit tcp 168.138.48.0/24 eq 443 8801 8802     any
+ permit tcp 168.138.56.0/21 eq 443 8801 8802     any
+ permit tcp 168.138.72.0/24 eq 443 8801 8802     any
+ permit tcp 168.138.74.0/25 eq 443 8801 8802     any
+ permit tcp 168.138.80.0/21 eq 443 8801 8802     any
+ permit tcp 168.138.96.0/22 eq 443 8801 8802     any
+ permit tcp 168.138.116.0/22 eq 443 8801 8802     any
+ permit tcp 168.138.244.0/24 eq 443 8801 8802     any
+ permit tcp 170.114.0.0/16 eq 443 8801 8802     any
+ permit tcp 173.231.80.0/20 eq 443 8801 8802     any
+ permit tcp 192.204.12.0/22 eq 443 8801 8802     any
+ permit tcp 193.122.16.0/20 eq 443 8801 8802     any
+ permit tcp 193.122.32.0/20 eq 443 8801 8802     any
+ permit tcp 193.122.208.0/20 eq 443 8801 8802     any
+ permit tcp 193.122.224.0/20 eq 443 8801 8802     any
+ permit tcp 193.122.240.0/20 eq 443 8801 8802     any
+ permit tcp 193.123.0.0/19 eq 443 8801 8802     any
+ permit tcp 193.123.40.0/21 eq 443 8801 8802     any
+ permit tcp 193.123.128.0/19 eq 443 8801 8802     any
+ permit tcp 193.123.168.0/21 eq 443 8801 8802     any
+ permit tcp 193.123.192.0/19 eq 443 8801 8802     any
+ permit tcp 198.251.128.0/17 eq 443 8801 8802     any
+ permit tcp 202.177.207.128/27 eq 443 8801 8802     any
+ permit tcp 204.80.104.0/21 eq 443 8801 8802     any
+ permit tcp 204.141.28.0/22 eq 443 8801 8802     any
+ permit tcp 206.247.0.0/16 eq 443 8801 8802     any
+ permit tcp 207.226.132.0/24 eq 443 8801 8802     any
+ permit tcp 209.9.211.0/24 eq 443 8801 8802     any
+ permit tcp 209.9.215.0/24 eq 443 8801 8802     any
+ permit tcp 213.19.144.0/24 eq 443 8801 8802     any
+ permit tcp 213.19.153.0/24 eq 443 8801 8802     any
+ permit tcp 213.244.140.0/24 eq 443 8801 8802     any
+ permit tcp 221.122.88.64/27 eq 443 8801 8802     any
+ permit tcp 221.122.88.128/25 eq 443 8801 8802     any
+ permit tcp 221.122.89.128/25 eq 443 8801 8802     any
+ permit tcp 221.123.139.192/27 eq 443 8801 8802     any
+permit udp  3.7.35.0/25 range 8801 8810 any
+permit udp  3.21.137.128/25 range 8801 8810 any
+permit udp  3.22.11.0/24 range 8801 8810 any
+permit udp  3.23.93.0/24 range 8801 8810 any
+permit udp  3.25.41.128/25  range 8801 8810 any
+permit udp  3.25.42.0/25 range 8801 8810 any
+permit udp  3.25.49.0/24 range 8801 8810 any
+permit udp  3.80.20.128/25 range 8801 8810 any
+permit udp  3.96.19.0/24 range 8801 8810 any
+permit udp  3.101.32.128/25 range 8801 8810 any
+permit udp  3.101.52.0/25 range 8801 8810 any
+permit udp  3.104.34.128/25 range 8801 8810 any
+permit udp  3.120.121.0/25 range 8801 8810 any
+permit udp  3.127.194.128/25 range 8801 8810 any
+permit udp  3.208.72.0/25 range 8801 8810 any
+permit udp  3.211.241.0/25 range 8801 8810 any
+permit udp  3.235.69.0/25 range 8801 8810 any
+permit udp  3.235.82.0/23 range 8801 8810 any
+permit udp  3.235.71.128/25 range 8801 8810 any
+permit udp  3.235.72.128/25 range 8801 8810 any
+permit udp  3.235.73.0/25 range 8801 8810 any
+permit udp  3.235.96.0/23 range 8801 8810 any
+permit udp  4.34.125.128/25 range 8801 8810 any
+permit udp  4.35.64.128/25 range 8801 8810 any
+permit udp  8.5.128.0/23 range 8801 8810 any
+permit udp  13.52.6.128/25 range 8801 8810 any
+permit udp  13.52.146.0/25 range 8801 8810 any
+permit udp  18.157.88.0/24 range 8801 8810 any
+permit udp  18.205.93.128/25 range 8801 8810 any
+permit udp  20.203.158.80/28 range 8801 8810 any
+permit udp  20.203.190.192/26 range 8801 8810 any
+permit udp  50.239.202.0/23 range 8801 8810 any
+permit udp  50.239.204.0/24 range 8801 8810 any
+permit udp  52.61.100.128/25 range 8801 8810 any
+permit udp  52.202.62.192/26 range 8801 8810 any
+permit udp  52.215.168.0/25 range 8801 8810 any
+permit udp  64.125.62.0/24 range 8801 8810 any
+permit udp  64.211.144.0/24 range 8801 8810 any
+permit udp  64.224.32.0/19 range 8801 8810 any
+permit udp  65.39.152.0/24 range 8801 8810 any
+permit udp  69.174.57.0/24 range 8801 8810 any
+permit udp  69.174.108.0/22 range 8801 8810 any
+permit udp  99.79.20.0/25 range 8801 8810 any
+permit udp  101.36.167.0/24 range 8801 8810 any
+permit udp  103.122.166.0/23 range 8801 8810 any
+permit udp  111.33.115.0/25 range 8801 8810 any
+permit udp  111.33.181.0/25 range 8801 8810 any
+permit udp  115.110.154.192/26 range 8801 8810   any
+permit udp  115.114.56.192/26 range 8801 8810 any
+permit udp  115.114.115.0/26  range 8801 8810 any
+permit udp  115.114.131.0/26 range 8801 8810 any
+permit udp  120.29.148.0/24 range 8801 8810 any
+permit udp  129.151.0.0/19 range 8801 8810 any
+permit udp  129.151.40.0/22 range 8801 8810 any
+permit udp  129.151.48.0/20 range 8801 8810 any
+permit udp  129.159.0.0/20 range 8801 8810 any
+permit udp  129.159.160.0/19 range 8801 8810 any
+permit udp  129.159.208.0/20 range 8801 8810 any
+permit udp  130.61.164.0/22 range 8801 8810 any
+permit udp  134.224.0.0/16 range 8801 8810 any
+permit udp  140.238.128.0/24 range 8801 8810 any
+permit udp  140.238.232.0/22 range 8801 8810 any
+permit udp  144.195.0.0/16 range 8801 8810 any
+permit udp  147.124.96.0/19 range 8801 8810 any
+permit udp  149.137.0.0/17 range 8801 8810 any
+permit udp  150.230.224.0/21 range 8801 8810 any
+permit udp  152.67.20.0/24 range 8801 8810 any
+permit udp  152.67.118.0/24 range 8801 8810 any
+permit udp  152.67.168.0/22 range 8801 8810 any
+permit udp  152.67.180.0/24 range 8801 8810 any
+permit udp  152.67.184.0/22 range 8801 8810 any
+permit udp  152.67.240.0/21 range 8801 8810 any
+permit udp  152.70.224.0/21 range 8801 8810 any
+permit udp  156.45.0.0/17 range 8801 8810 any
+permit udp  158.101.64.0/24 range 8801 8810 any
+permit udp  158.101.184.0/22 range 8801 8810 any
+permit udp  160.1.56.128/25 range 8801 8810 any
+permit udp  161.199.136.0/22 range 8801 8810 any
+permit udp  162.12.232.0/22 range 8801 8810 any
+permit udp  162.255.36.0/22 range 8801 8810 any
+permit udp  165.254.88.0/23 range 8801 8810 any
+permit udp  166.108.64.0/18 range 8801 8810 any
+permit udp  168.138.16.0/22 range 8801 8810 any
+permit udp  168.138.48.0/24 range 8801 8810 any
+permit udp  168.138.56.0/21 range 8801 8810 any
+permit udp  168.138.72.0/24 range 8801 8810 any
+permit udp  168.138.74.0/25 range 8801 8810 any
+permit udp  168.138.80.0/21 range 8801 8810 any
+permit udp  168.138.96.0/22  range 8801 8810 any
+permit udp  168.138.116.0/22 range 8801 8810 any
+permit udp  168.138.244.0/24 range 8801 8810 any
+permit udp  170.114.0.0/16 range 8801 8810 any
+permit udp  173.231.80.0/20 range 8801 8810 any
+permit udp  192.204.12.0/22 range 8801 8810 any
+permit udp  193.122.16.0/20 range 8801 8810 any
+permit udp  193.122.32.0/20 range 8801 8810 any
+permit udp  193.122.208.0/20 range 8801 8810 any
+permit udp  193.122.224.0/20 range 8801 8810 any
+permit udp  193.122.240.0/20 range 8801 8810 any
+permit udp  193.123.0.0/19 range 8801 8810 any
+permit udp  193.123.40.0/21 range 8801 8810 any
+permit udp  193.123.128.0/19 range 8801 8810 any
+permit udp  193.123.168.0/21 range 8801 8810 any
+permit udp  193.123.192.0/19 range 8801 8810 any
+permit udp  198.251.128.0/17 range 8801 8810 any
+permit udp  202.177.207.128/27 range 8801 8810 any
+permit udp  204.80.104.0/21 range 8801 8810 any
+permit udp  204.141.28.0/22 range 8801 8810 any
+permit udp  206.247.0.0/16 range 8801 8810 any
+permit udp  207.226.132.0/24 range 8801 8810 any
+permit udp  209.9.211.0/24 range 8801 8810 any
+permit udp  209.9.215.0/24 range 8801 8810 any
+permit udp  213.19.144.0/24 range 8801 8810 any
+permit udp  213.19.153.0/24 range 8801 8810 any
+permit udp  213.244.140.0/24 range 8801 8810 any
+permit udp  221.122.88.64/27 range 8801 8810 any
+permit udp  221.122.88.128/25 range 8801 8810 any
+permit udp  221.122.89.128/25 range 8801 8810 any
+permit udp  221.123.139.192/27 range 8801 8810 any
+permit udp 3.7.35.0/25 eq 3478 3479  any
+permit udp 3.21.137.128/25 eq 3478 3479  any
+permit udp 3.22.11.0/24 eq 3478 3479  any
+permit udp 3.23.93.0/24 eq 3478 3479  any
+permit udp 3.25.41.128/25  eq 3478 3479  any
+permit udp 3.25.42.0/25 eq 3478 3479  any
+permit udp 3.25.49.0/24 eq 3478 3479  any
+permit udp 3.80.20.128/25 eq 3478 3479  any
+permit udp 3.96.19.0/24 eq 3478 3479  any
+permit udp 3.101.32.128/25 eq 3478 3479  any
+permit udp 3.101.52.0/25 eq 3478 3479  any
+permit udp 3.104.34.128/25 eq 3478 3479  any
+permit udp 3.120.121.0/25 eq 3478 3479  any
+permit udp 3.127.194.128/25 eq 3478 3479  any
+permit udp 3.208.72.0/25 eq 3478 3479  any
+permit udp 3.211.241.0/25 eq 3478 3479  any
+permit udp 3.235.69.0/25 eq 3478 3479  any
+permit udp 3.235.82.0/23 eq 3478 3479  any
+permit udp 3.235.71.128/25 eq 3478 3479  any
+permit udp 3.235.72.128/25 eq 3478 3479  any
+permit udp 3.235.73.0/25 eq 3478 3479  any
+permit udp 3.235.96.0/23 eq 3478 3479  any
+permit udp 4.34.125.128/25 eq 3478 3479  any
+permit udp 4.35.64.128/25 eq 3478 3479  any
+permit udp 8.5.128.0/23 eq 3478 3479  any
+permit udp 13.52.6.128/25 eq 3478 3479  any
+permit udp 13.52.146.0/25 eq 3478 3479  any
+permit udp 18.157.88.0/24 eq 3478 3479  any
+permit udp 18.205.93.128/25 eq 3478 3479  any
+permit udp 20.203.158.80/28 eq 3478 3479  any
+permit udp 20.203.190.192/26 eq 3478 3479  any
+permit udp 50.239.202.0/23 eq 3478 3479  any
+permit udp 50.239.204.0/24 eq 3478 3479  any
+permit udp 52.61.100.128/25 eq 3478 3479  any
+permit udp 52.202.62.192/26 eq 3478 3479  any
+permit udp 52.215.168.0/25 eq 3478 3479  any
+permit udp 64.125.62.0/24 eq 3478 3479  any
+permit udp 64.211.144.0/24 eq 3478 3479  any
+permit udp 64.224.32.0/19 eq 3478 3479  any
+permit udp 65.39.152.0/24 eq 3478 3479  any
+permit udp 69.174.57.0/24 eq 3478 3479  any
+permit udp 69.174.108.0/22 eq 3478 3479  any
+permit udp 99.79.20.0/25 eq 3478 3479  any
+permit udp 101.36.167.0/24 eq 3478 3479  any
+permit udp 103.122.166.0/23 eq 3478 3479  any
+permit udp 111.33.115.0/25 eq 3478 3479  any
+permit udp 111.33.181.0/25 eq 3478 3479  any
+permit udp 115.110.154.192/26 eq 3478 3479    any
+permit udp 115.114.56.192/26 eq 3478 3479  any
+permit udp 115.114.115.0/26  eq 3478 3479  any
+permit udp 115.114.131.0/26 eq 3478 3479  any
+permit udp 120.29.148.0/24 eq 3478 3479  any
+permit udp 129.151.0.0/19 eq 3478 3479  any
+permit udp 129.151.40.0/22 eq 3478 3479  any
+permit udp 129.151.48.0/20 eq 3478 3479  any
+permit udp 129.159.0.0/20 eq 3478 3479  any
+permit udp 129.159.160.0/19 eq 3478 3479  any
+permit udp 129.159.208.0/20 eq 3478 3479  any
+permit udp 130.61.164.0/22 eq 3478 3479  any
+permit udp 134.224.0.0/16 eq 3478 3479  any
+permit udp 140.238.128.0/24 eq 3478 3479  any
+permit udp 140.238.232.0/22 eq 3478 3479  any
+permit udp 144.195.0.0/16 eq 3478 3479  any
+permit udp 147.124.96.0/19 eq 3478 3479  any
+permit udp 149.137.0.0/17 eq 3478 3479  any
+permit udp 150.230.224.0/21 eq 3478 3479  any
+permit udp 152.67.20.0/24 eq 3478 3479  any
+permit udp 152.67.118.0/24 eq 3478 3479  any
+permit udp 152.67.168.0/22 eq 3478 3479  any
+permit udp 152.67.180.0/24 eq 3478 3479  any
+permit udp 152.67.184.0/22 eq 3478 3479  any
+permit udp 152.67.240.0/21 eq 3478 3479  any
+permit udp 152.70.224.0/21 eq 3478 3479  any
+permit udp 156.45.0.0/17 eq 3478 3479  any
+permit udp 158.101.64.0/24 eq 3478 3479  any
+permit udp 158.101.184.0/22 eq 3478 3479  any
+permit udp 160.1.56.128/25 eq 3478 3479  any
+permit udp 161.199.136.0/22 eq 3478 3479  any
+permit udp 162.12.232.0/22 eq 3478 3479  any
+permit udp 162.255.36.0/22 eq 3478 3479  any
+permit udp 165.254.88.0/23 eq 3478 3479  any
+permit udp 166.108.64.0/18 eq 3478 3479  any
+permit udp 168.138.16.0/22 eq 3478 3479  any
+permit udp 168.138.48.0/24 eq 3478 3479  any
+permit udp 168.138.56.0/21 eq 3478 3479  any
+permit udp 168.138.72.0/24 eq 3478 3479  any
+permit udp 168.138.74.0/25 eq 3478 3479  any
+permit udp 168.138.80.0/21 eq 3478 3479  any
+permit udp 168.138.96.0/22  eq 3478 3479  any
+permit udp 168.138.116.0/22 eq 3478 3479  any
+permit udp 168.138.244.0/24 eq 3478 3479  any
+permit udp 170.114.0.0/16 eq 3478 3479  any
+permit udp 173.231.80.0/20 eq 3478 3479  any
+permit udp 192.204.12.0/22 eq 3478 3479  any
+permit udp 193.122.16.0/20 eq 3478 3479  any
+permit udp 193.122.32.0/20 eq 3478 3479  any
+permit udp 193.122.208.0/20 eq 3478 3479  any
+permit udp 193.122.224.0/20 eq 3478 3479  any
+permit udp 193.122.240.0/20 eq 3478 3479  any
+permit udp 193.123.0.0/19 eq 3478 3479  any
+permit udp 193.123.40.0/21 eq 3478 3479  any
+permit udp 193.123.128.0/19 eq 3478 3479  any
+permit udp 193.123.168.0/21 eq 3478 3479  any
+permit udp 193.123.192.0/19 eq 3478 3479  any
+permit udp 198.251.128.0/17 eq 3478 3479  any
+permit udp 202.177.207.128/27 eq 3478 3479  any
+permit udp 204.80.104.0/21 eq 3478 3479  any
+permit udp 204.141.28.0/22 eq 3478 3479  any
+permit udp 206.247.0.0/16 eq 3478 3479  any
+permit udp 207.226.132.0/24 eq 3478 3479  any
+permit udp 209.9.211.0/24 eq 3478 3479  any
+permit udp 209.9.215.0/24 eq 3478 3479  any
+permit udp 213.19.144.0/24 eq 3478 3479  any
+permit udp 213.19.153.0/24 eq 3478 3479  any
+permit udp 213.244.140.0/24 eq 3478 3479  any
+permit udp 221.122.88.64/27 eq 3478 3479  any
+permit udp 221.122.88.128/25 eq 3478 3479  any
+permit udp 221.122.89.128/25 eq 3478 3479  any
+permit udp 221.123.139.192/27 eq 3478 3479  any
+ permit tcp 8.5.128.0/24 eq 5091 any
+ permit tcp 64.211.144.0/24  eq 5091 any
+ permit tcp 65.39.152.0/24  eq 5091 any
+ permit tcp 69.174.57.0/24  eq 5091 any
+ permit tcp 101.36.167.0/24  eq 5091 any
+ permit tcp 103.122.166.0/23  eq 5091 any
+ permit tcp 120.29.148.0/24  eq 5091 any
+ permit tcp 147.124.96.0/19  eq 5091 any
+ permit tcp 149.137.0.0/17  eq 5091 any
+ permit tcp 162.12.232.0/22  eq 5091 any
+ permit tcp 173.231.92.0/24  eq 5091 any
+ permit tcp 173.231.94.0/24  eq 5091 any
+ permit tcp 192.204.12.0/22  eq 5091 any
+ permit tcp 209.9.215.0/24  eq 5091 any
+ permit tcp 213.19.144.0/24  eq 5091 any
+ permit tcp 213.19.153.0/24  eq 5091 any
+ permit tcp 213.244.140.0/24  eq 5091 any
+ permit tcp 3.21.137.128/25 eq 390 any
+ permit tcp 3.235.96.0/23 eq 390 any
+ permit udp 64.211.144.0/24 range 20000 64000 any
+ permit udp 65.39.152.0/24 range 20000 64000 any
+ permit udp 69.174.57.0/24 range 20000 64000 any
+ permit udp 101.36.167.0/24 range 20000 64000 any
+ permit udp 103.122.166.0/23 range 20000 64000 any
+ permit udp 147.124.96.0/19 range 20000 64000 any
+ permit udp 149.137.0.0/17 range 20000 64000 any
+ permit udp 162.12.232.0/22 range 20000 64000 any
+ permit udp 173.231.92.0/24 range 20000 64000 any
+ permit udp 173.231.94.0/24 range 20000 64000 any
+ permit udp 207.226.132.0/24 range 20000 64000 any
+ permit udp 209.9.211.0/24 range 20000 64000 any
+ permit udp 213.19.144.0/24  range 20000 64000 any
+ permit udp 213.244.140.0/24 range 20000 64000 any
+ deny ip any any 
+
+
+
+
+

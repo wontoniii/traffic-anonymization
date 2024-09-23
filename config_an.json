@@ -1,0 +1,14 @@
+{
+  "InInterface": {
+    "Driver": "pcapread",
+    "Ifname": "en1"
+  },
+  "OutInterface": {
+    "Driver": "filewrite",
+    "Ifname": "anon.pcap"
+  },
+  "Misc": {
+    "Anonymize": true,
+    "LogLevel": "debug"
+  }
+}
