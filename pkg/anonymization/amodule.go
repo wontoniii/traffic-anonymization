@@ -152,7 +152,6 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 			log.Debugf("Added ip6 %d", len(pkt.OutBuf.Bytes()))
 		}
 		// Brutal anonymization of ethernet
-		// TODO use unused MAC addresses to put timestamp
 		// var err error
 		// pkt.Eth.SrcMAC, err = net.ParseMAC("00:00:00:00:00:00")
 		// if err != nil {
@@ -164,6 +163,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 		// }
 		// pkt.Eth.SerializeTo(pkt.OutBuf, options)
 
+		// TODO use unused MAC addresses to put timestamp
 		ethernetLayer := &layers.Ethernet{
 			SrcMAC:       net.HardwareAddr{0xff, 0xaa, 0xfa, 0xaa, 0xff, 0xaa},
 			DstMAC:       net.HardwareAddr{0xbd, 0xbd, 0xbd, 0xbd, 0xbd, 0xbd},
