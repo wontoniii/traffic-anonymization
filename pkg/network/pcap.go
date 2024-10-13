@@ -86,7 +86,7 @@ func (h *PcapHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 }
 
 func (h *PcapHandle) WritePacketData(pkt *Packet) error {
-	err := h.PHandle.WritePacketData(pkt.RawData)
+	err := h.PHandle.WritePacketData(pkt.OutBuf.Bytes())
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -21,45 +21,32 @@ func NewReader(netif *NetworkInterface, packetProcessor PacketProcessor) *Reader
 	return r
 }
 
-func (tp *Reader) parseUdpLayer(udp *layers.UDP) (int64, uint16, uint16, error) {
+func (tp *Reader) parseUdpLayer(udp *layers.UDP) (uint16, uint16, error) {
 	srcPort := udp.SrcPort
 	dstPort := udp.DstPort
-	return int64(udp.Length - 8), uint16(srcPort), uint16(dstPort), nil
+	return uint16(srcPort), uint16(dstPort), nil
 }
 
-func (tp *Reader) parseTcpLayer(tcp *layers.TCP, ipDataLen int64) (int64, uint16, uint16, uint32, error) {
+func (tp *Reader) parseTcpLayer(tcp *layers.TCP) (uint16, uint16, error) {
 	srcPort := tcp.SrcPort
 	dstPort := tcp.DstPort
-	seq := tcp.Seq
-	return ipDataLen - 4*int64(tcp.DataOffset), uint16(srcPort), uint16(dstPort), seq, nil
+	return uint16(srcPort), uint16(dstPort), nil
 }
 
-func (tp *Reader) parseIpV4Layer(ip *layers.IPv4) (int64, string, string, bool, error) {
-	var isLocal bool
-	var ipDataLen int64
+func (tp *Reader) parseIpV4Layer(ip *layers.IPv4) (string, string, error) {
 	var srcIp, dstIp string
-
-	ipDataLen = int64(ip.Length - 4*uint16(ip.IHL))
 	srcIp = ip.SrcIP.String()
 	dstIp = ip.DstIP.String()
 
-	return ipDataLen, srcIp, dstIp, isLocal, nil
+	return srcIp, dstIp, nil
 }
 
-func (tp *Reader) parseIpV6Layer(ip *layers.IPv6) (int64, string, string, bool, error) {
-	var isLocal bool
-	var ipDataLen int64
+func (tp *Reader) parseIpV6Layer(ip *layers.IPv6) (string, string, error) {
 	var srcIp, dstIp string
-
-	ipDataLen = int64(ip.Length)
 	srcIp = ip.SrcIP.String()
 	dstIp = ip.DstIP.String()
 
-	return ipDataLen, srcIp, dstIp, isLocal, nil
-}
-
-func (tp *Reader) parseEthLayer(eth *layers.Ethernet) (string, error) {
-	return eth.SrcMAC.String(), nil
+	return srcIp, dstIp, nil
 }
 
 // TrafficParser is the worker function for parsing network traffic. Each worker reads directly from the ring that is passed
@@ -76,7 +63,7 @@ func (tp *Reader) Parse(wg *sync.WaitGroup, stop chan struct{}) {
 	var isValid bool
 	var parsingErr error
 
-	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.Payload)
+	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.TLS, pkt.Dns, pkt.Payload)
 	decoded := []gopacket.LayerType{}
 	if wg != nil {
 		defer wg.Done()
@@ -115,21 +102,25 @@ loop:
 			for _, typ := range decoded {
 				switch typ {
 				case layers.LayerTypeEthernet:
-					pkt.HwAddr, parsingErr = tp.parseEthLayer(pkt.Eth)
+
 				case layers.LayerTypeIPv4:
-					pkt.Length, pkt.SrcIP, pkt.DstIP, pkt.IsLocal, parsingErr = tp.parseIpV4Layer(pkt.Ip4)
+					pkt.SrcIP, pkt.DstIP, parsingErr = tp.parseIpV4Layer(pkt.Ip4)
 					pkt.IsIPv4 = true
+				case layers.LayerTypeIPv6:
+					pkt.SrcIP, pkt.DstIP, parsingErr = tp.parseIpV6Layer(pkt.Ip6)
+					pkt.IsIPv6 = true
 				case layers.LayerTypeTCP:
-					pkt.DataLength, pkt.SrcPort, pkt.DstPort, pkt.SeqNumber, parsingErr = tp.parseTcpLayer(pkt.Tcp, pkt.Length)
+					pkt.SrcPort, pkt.DstPort, parsingErr = tp.parseTcpLayer(pkt.Tcp)
 					pkt.IsTCP = true
 					isValid = true
 				case layers.LayerTypeUDP:
-					pkt.DataLength, pkt.SrcPort, pkt.DstPort, parsingErr = tp.parseUdpLayer(pkt.Udp)
-					pkt.IsTCP = false
+					pkt.SrcPort, pkt.DstPort, parsingErr = tp.parseUdpLayer(pkt.Udp)
+					pkt.IsUDP = true
 					isValid = true
-				case layers.LayerTypeIPv6:
-					pkt.Length, pkt.SrcIP, pkt.DstIP, pkt.IsLocal, parsingErr = tp.parseIpV6Layer(pkt.Ip6)
-					pkt.IsIPv4 = false
+				case layers.LayerTypeTLS:
+					pkt.IsTLS = true
+				case layers.LayerTypeDNS:
+					pkt.IsDNS = true
 				}
 			}
 

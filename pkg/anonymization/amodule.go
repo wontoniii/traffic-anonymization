@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	log "github.com/sirupsen/logrus"
 	"github.com/wontoniii/traffic-anonymization/pkg/network"
 )
@@ -65,6 +66,7 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 	}
 
 	ret.loopTime = loopTime
+	// TODO: Implement loop time
 	if ret.loopTime != 0 {
 		go func() {
 			ret.ticker = time.NewTicker(loopTime)
@@ -86,59 +88,102 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 // ProcessPacket processes incoming packets.
 func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 	if am.anonymize {
-		buffer := gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)
-		//TODO Add check on whether it's internal address or not
-		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.SrcIP)) || am.hasLocalNet && am.localNetCIDR.Contains(net.ParseIP(pkt.SrcIP)) {
+		is_src_local := am.localNetCIDR.Contains(net.ParseIP(pkt.SrcIP))
+		is_dst_local := am.localNetCIDR.Contains(net.ParseIP(pkt.DstIP))
+		if is_src_local && is_dst_local && am.hasLocalNet {
+			log.Debugf("Both source and destination are private, dropping packet")
+			return nil
+		}
+
+		pkt.OutBuf = gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)
+
+		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.SrcIP)) || am.hasLocalNet && is_src_local {
 			pkt.SrcIP = am.ctx.Anonymize(net.ParseIP(pkt.SrcIP)).String()
 		}
-		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.DstIP)) || am.hasLocalNet && am.localNetCIDR.Contains(net.ParseIP(pkt.DstIP)) {
+		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.DstIP)) || am.hasLocalNet && is_dst_local {
 			pkt.DstIP = am.ctx.Anonymize(net.ParseIP(pkt.DstIP)).String()
 		}
-		options := gopacket.SerializeOptions{}
-		// Truncated packet
-		// pkt.Payload.SerializeTo(buffer, options)
-		// Non truncated packet
-		gopacket.Payload(pkt.RawData[(int64(len(pkt.RawData))-pkt.DataLength):]).SerializeTo(buffer, options)
 
+		options := gopacket.SerializeOptions{}
+		if pkt.IsDNS {
+			err := pkt.Dns.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added dns %d", len(pkt.OutBuf.Bytes()))
+		}
+		if pkt.IsTLS {
+			err := pkt.TLS.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added tls %d", len(pkt.OutBuf.Bytes()))
+		}
 		if pkt.IsTCP {
-			pkt.Tcp.SerializeTo(buffer, options)
-			log.Debugf("Added tcp %d", len(buffer.Bytes()))
-		} else {
-			pkt.Udp.SerializeTo(buffer, options)
-			log.Debugf("Added udp %d", len(buffer.Bytes()))
+			err := pkt.Tcp.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added tcp %d", len(pkt.OutBuf.Bytes()))
+		}
+		if pkt.IsUDP {
+			err := pkt.Udp.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added udp %d", len(pkt.OutBuf.Bytes()))
 		}
 		if pkt.IsIPv4 {
 			pkt.Ip4.SrcIP = net.ParseIP(pkt.SrcIP)
 			pkt.Ip4.DstIP = net.ParseIP(pkt.DstIP)
-			pkt.Ip4.SerializeTo(buffer, options)
-			log.Debugf("Added ip4 %d", len(buffer.Bytes()))
-		} else {
+			err := pkt.Ip4.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added ip4 %d", len(pkt.OutBuf.Bytes()))
+		}
+		if pkt.IsIPv6 {
 			pkt.Ip6.SrcIP = net.ParseIP(pkt.SrcIP)
 			pkt.Ip6.DstIP = net.ParseIP(pkt.DstIP)
-			pkt.Ip6.SerializeTo(buffer, options)
-			log.Debugf("Added ip6 %d", len(buffer.Bytes()))
+			err := pkt.Ip6.SerializeTo(pkt.OutBuf, options)
+			if err != nil {
+				panic(err)
+			}
+			log.Debugf("Added ip6 %d", len(pkt.OutBuf.Bytes()))
 		}
 		// Brutal anonymization of ethernet
-		var err error
-		pkt.Eth.SrcMAC, err = net.ParseMAC("00:00:00:00:00:00")
-		if err != nil {
-			panic(err)
-		}
-		pkt.Eth.DstMAC, err = net.ParseMAC("00:00:00:00:00:00")
-		if err != nil {
-			panic(err)
-		}
-		pkt.Eth.SerializeTo(buffer, options)
-		log.Debugf("Added eth %d", len(buffer.Bytes()))
+		// TODO use unused MAC addresses to put timestamp
+		// var err error
+		// pkt.Eth.SrcMAC, err = net.ParseMAC("00:00:00:00:00:00")
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// pkt.Eth.DstMAC, err = net.ParseMAC("00:00:00:00:00:00")
+		// if err != nil {
+		// 	panic(err)
+		// }
+		// pkt.Eth.SerializeTo(pkt.OutBuf, options)
 
-		if len(pkt.RawData) < 60 {
-			no_padded_len := len(pkt.RawData)
-			pkt.RawData = buffer.Bytes()[:no_padded_len]
+		ethernetLayer := &layers.Ethernet{
+			SrcMAC:       net.HardwareAddr{0xff, 0xaa, 0xfa, 0xaa, 0xff, 0xaa},
+			DstMAC:       net.HardwareAddr{0xbd, 0xbd, 0xbd, 0xbd, 0xbd, 0xbd},
+			EthernetType: layers.EthernetTypeIPv4,
+		}
+
+		if pkt.IsIPv6 {
+			ethernetLayer.EthernetType = layers.EthernetTypeIPv6
+		}
+
+		ethernetLayer.SerializeTo(pkt.OutBuf, options)
+
+		log.Debugf("Added eth %d", len(pkt.OutBuf.Bytes()))
+		if pkt.Ci.Length < len(pkt.OutBuf.Bytes()) {
+			log.Errorf("The packet length is smaller than the produced data len, src %s, dst %s", pkt.SrcIP, pkt.DstIP)
+			pkt.Ci.Length = len(pkt.OutBuf.Bytes())
+			// return nil
 		} else {
-			pkt.RawData = buffer.Bytes()
+			log.Debugf("And the produced data len is %d", len(pkt.OutBuf.Bytes()))
 		}
-
-		log.Debugf("And the produced data len is %d", len(pkt.RawData))
 	}
 	am.packetProcessor.ProcessPacket(pkt)
 

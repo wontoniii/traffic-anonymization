@@ -1,15 +1,15 @@
 {
   "InInterface": {
     "Driver": "pcapread",
-    "Ifname": "en1"
+    "Ifname": "eth0"
   },
   "OutInterface": {
     "Driver": "filewrite",
-    "Ifname": "anon.pcap"
+    "Ifname": "test_data/test_local_anon.pcap"
   },
   "Misc": {
     "Anonymize": true,
-    "LocalNet": "192.168.0.0/16",
+    "LocalNet": "140.77.0.0/16",
     "PrivateNets": false,
     "LoopTime": 86400000000,
     "LogLevel": "debug"

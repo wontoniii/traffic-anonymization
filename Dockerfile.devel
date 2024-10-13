@@ -1,0 +1,13 @@
+FROM golang:bookworm AS builder
+
+# Install capture libraries
+RUN apt-get update
+RUN  apt-get -y install libpcap0.8 libpcap0.8-dev
+RUN  apt-get -y install tcpreplay
+RUN  apt-get -y install tcpdump
+
+# Set the working directory to ...
+WORKDIR /go/src/github.com/wontoniii/traffic-anonymization/
+
+# Add folder to drop output.
+RUN mkdir /out

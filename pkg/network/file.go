@@ -72,12 +72,11 @@ func (h *FileHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to write packet to file")
 	// Write packet to file
 	pkt.Ci.InterfaceIndex = 0
-	if pkt.Ci.Length > pkt.Ci.CaptureLength {
-		pkt.Ci.CaptureLength = pkt.Ci.Length
-	}
-	err := h.FHandleW.WritePacket(pkt.Ci, pkt.RawData)
+	pkt.Ci.CaptureLength = len(pkt.OutBuf.Bytes())
+	err := h.FHandleW.WritePacket(pkt.Ci, pkt.OutBuf.Bytes())
 	if err != nil {
 		log.Fatalf("Could not write the packet, error: %s", err)
+		panic(err)
 	}
 	return nil
 }
