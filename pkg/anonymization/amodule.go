@@ -40,7 +40,7 @@ type AModule struct {
 }
 
 // NewAModule
-func NewAModule(key string, anonymize bool, privateNets bool, localNet string, loopTime time.Duration, encapsulateDst string, packetProcessor network.PacketProcessor) *AModule {
+func NewAModule(key string, anonymize bool, privateNets bool, localNet string, loopTime time.Duration, packetProcessor network.PacketProcessor) *AModule {
 	ret := &AModule{}
 
 	ret.anonymize = anonymize
@@ -64,12 +64,6 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 
 	}
 
-	// TODO: add the encapsulation part
-	if encapsulateDst != "" {
-		ret.encapsulateDst = encapsulateDst
-		ret.hasEncapsulateDst = true
-	}
-
 	ret.loopTime = loopTime
 	if ret.loopTime != 0 {
 		go func() {
@@ -89,9 +83,7 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 	return ret
 }
 
-// ProcessPacket processes incoming packets. If the flow is already in the cache, it updates
-// its counters. If not, it creates it based on the DNS type and inserts it into
-// the cache.
+// ProcessPacket processes incoming packets.
 func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 	if am.anonymize {
 		buffer := gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)

@@ -27,12 +27,11 @@ type InterfaceConfig struct {
 }
 
 type MiscConfig struct {
-	Anonymize      bool
-	LoopTime       time.Duration
-	PrivateNets    bool
-	LocalNet       string
-	EncapsulateDst string
-	LogLevel       string
+	Anonymize   bool
+	LoopTime    time.Duration
+	PrivateNets bool
+	LocalNet    string
+	LogLevel    string
 }
 
 type SysConfig struct {
@@ -76,6 +75,5 @@ func (conf *SysConfig) loadInterfacesConfig() {
 	conf.Misc.LoopTime = viper.GetDuration("Misc.LoopTime")
 	conf.Misc.PrivateNets = viper.GetBool("Misc.PrivateNets")
 	conf.Misc.LocalNet = viper.GetString("Misc.LocalNet")
-	conf.Misc.EncapsulateDst = viper.GetString("Misc.EncapsulateDst")
 	conf.Misc.LogLevel = viper.GetString("Misc.LogLevel")
 }
