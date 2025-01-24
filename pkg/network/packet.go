@@ -57,3 +57,12 @@ func (packet *Packet) Clear() {
 	packet.IsDNS = false
 	packet.IsTLS = false
 }
+
+func (packet *Packet) ClearBool() {
+	packet.IsIPv4 = false
+	packet.IsIPv6 = false
+	packet.IsTCP = false
+	packet.IsUDP = false
+	packet.IsDNS = false
+	packet.IsTLS = false
+}

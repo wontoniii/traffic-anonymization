@@ -72,7 +72,7 @@ func (cp *IfStatsPrinter) Generate() []byte {
 
 func (cp *IfStatsPrinter) Run() {
 	cp.end = make(chan bool, 1)
-	ticker := time.NewTicker(time.Duration(10 * time.Minute))
+	ticker := time.NewTicker(time.Duration(1 * time.Minute))
 	for {
 		select {
 		case <-cp.end:

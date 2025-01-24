@@ -134,6 +134,7 @@ loop:
 			}
 
 			tp.packetProcessor.ProcessPacket(pkt)
+			pkt.ClearBool()
 		}
 	}
 }
