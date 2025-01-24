@@ -11,7 +11,7 @@
     "Anonymize": true,
     "LocalNet": "140.77.0.0/16",
     "PrivateNets": false,
-    "LoopTime": 86400000000,
+    "LoopTime": 2,
     "LogLevel": "debug"
   }
 }

@@ -2,6 +2,7 @@ package anonymization
 
 import (
 	"net"
+	"sync"
 	"time"
 
 	"github.com/google/gopacket"
@@ -14,8 +15,8 @@ import (
 type AModule struct {
 	// Whether to anonymize IP addresses or not
 	anonymize bool
-	// Loop time for the anonymization module
-	loopTime time.Duration
+	// Time of the day when to create a new key
+	loopTime int
 	// Whether to anonymize private networks or not
 	privateNets bool
 	// Local network to anonymize
@@ -36,18 +37,24 @@ type AModule struct {
 	privateNetsCIDR []*net.IPNet
 	// Local network variable
 	localNetCIDR *net.IPNet
-	// Time ticker
-	ticker *time.Ticker
+	// Stop channel
+	stopChan chan struct{}
+	// Mutex to access cryptopan
+	mu sync.Mutex
 }
 
 // NewAModule
-func NewAModule(key string, anonymize bool, privateNets bool, localNet string, loopTime time.Duration, packetProcessor network.PacketProcessor) *AModule {
+func NewAModule(key string, anonymize bool, privateNets bool, localNet string, loopTime int, packetProcessor network.PacketProcessor) *AModule {
 	ret := &AModule{}
+
+	var err error
 
 	ret.anonymize = anonymize
 	if ret.anonymize {
-		var testKey = []byte{45, 148, 31, 183, 121, 99, 98, 199, 103, 48, 199, 151, 176, 128, 82, 175, 33, 228, 17, 204, 122, 199, 124, 65, 130, 80, 120, 210, 81, 207, 169, 48}
-		ret.ctx, _ = NewCryptoPAn(testKey)
+		ret.ctx, err = NewCryptoPAn(CreateRandomKey())
+		if err != nil {
+			log.Fatal("Error initializing crypto module", err)
+		}
 
 		ret.loopTime = loopTime
 		// Check if need to active loop to change anonymization key
@@ -63,26 +70,51 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 			ret.hasLocalNet = true
 		}
 
-	}
-
-	ret.loopTime = loopTime
-	// TODO: Implement loop time
-	if ret.loopTime != 0 {
+		ret.stopChan = make(chan struct{})
 		go func() {
-			ret.ticker = time.NewTicker(loopTime)
 			for {
+				now := time.Now()
+				nextTicker := time.Date(
+					now.Year(),
+					now.Month(),
+					now.Day(),
+					ret.loopTime, 0, 0, 0, now.Location(),
+				)
+
+				if now.After(nextTicker) {
+					nextTicker = nextTicker.Add(24 * time.Hour)
+				}
+
+				// Calculate the duration until the next 2 AM
+				durationTillTicker := time.Until(nextTicker)
+
 				select {
-				case <-ret.ticker.C:
-					//Change the key
+				case <-time.After(durationTillTicker):
+					// Replace key after ticker
+					ret.mu.Lock()
+					ret.ctx, err = NewCryptoPAn(CreateRandomKey())
+					if err != nil {
+						log.Fatal("Error initializing crypto module", err)
+					}
+					ret.mu.Unlock()
+				case <-ret.stopChan:
+					// Exit the loop if stopChan is closed
+					return
 				}
 			}
 		}()
+
 	}
 
 	ret.packetProcessor = packetProcessor
 
 	log.Debugln("AModule initialized correctly")
 	return ret
+}
+
+func (am *AModule) Stop() error {
+	close(am.stopChan)
+	return nil
 }
 
 // ProcessPacket processes incoming packets.
@@ -97,12 +129,14 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 
 		pkt.OutBuf = gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)
 
+		am.mu.Lock()
 		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.SrcIP)) || am.hasLocalNet && is_src_local {
 			pkt.SrcIP = am.ctx.Anonymize(net.ParseIP(pkt.SrcIP)).String()
 		}
 		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.DstIP)) || am.hasLocalNet && is_dst_local {
 			pkt.DstIP = am.ctx.Anonymize(net.ParseIP(pkt.DstIP)).String()
 		}
+		am.mu.Unlock()
 
 		options := gopacket.SerializeOptions{}
 		if pkt.IsDNS {

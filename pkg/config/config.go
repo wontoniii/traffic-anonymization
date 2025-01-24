@@ -4,7 +4,6 @@ package config
 import (
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/spf13/viper"
 )
@@ -28,7 +27,7 @@ type InterfaceConfig struct {
 
 type MiscConfig struct {
 	Anonymize   bool
-	LoopTime    time.Duration
+	LoopTime    int
 	PrivateNets bool
 	LocalNet    string
 	LogLevel    string
@@ -72,7 +71,7 @@ func (conf *SysConfig) loadInterfacesConfig() {
 	conf.OutIf.Ifname = viper.GetString("OutInterface.Ifname")
 	conf.OutIf.Filter = viper.GetString("OutInterface.Filter")
 	conf.Misc.Anonymize = viper.GetBool("Misc.Anonymize")
-	conf.Misc.LoopTime = viper.GetDuration("Misc.LoopTime")
+	conf.Misc.LoopTime = viper.GetInt("Misc.LoopTime")
 	conf.Misc.PrivateNets = viper.GetBool("Misc.PrivateNets")
 	conf.Misc.LocalNet = viper.GetString("Misc.LocalNet")
 	conf.Misc.LogLevel = viper.GetString("Misc.LogLevel")

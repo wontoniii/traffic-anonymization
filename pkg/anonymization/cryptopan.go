@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/subtle"
+	"math/rand"
 	"net"
 	"strconv"
 )
@@ -22,6 +23,14 @@ type KeySizeError int
 
 func (e KeySizeError) Error() string {
 	return "invalid key size " + strconv.Itoa(int(e))
+}
+
+func CreateRandomKey() []byte {
+	key := make([]byte, 32)
+	for i := 0; i < 5; i++ {
+		key[i] = byte(rand.Intn(255) + 1)
+	}
+	return key
 }
 
 type bitvector [blockSize]byte
