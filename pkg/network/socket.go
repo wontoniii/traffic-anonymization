@@ -30,7 +30,7 @@ func (h *SocketHandle) NewSocketInterface() {
 		Port: port,
 		IP:   net.ParseIP(ip),
 	}
-	h.conn, err = net.ListenPacket("udp", h.dest.String())
+	h.conn, err = net.ListenPacket("udp", ":0")
 	if err != nil {
 		log.Fatalf("Could not create the socket, error: %s", err)
 	}
