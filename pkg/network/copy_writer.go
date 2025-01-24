@@ -19,6 +19,7 @@ func (h *CopyWriterHandle) Init(conf *HandleConfig) error {
 	h.fh = &FileHandle{}
 	h.fh.Init(conf)
 	h.bufferChan = make(chan PacketCopyBuffer, 32768)
+	go h.receiver()
 	return nil
 }
 
@@ -33,6 +34,7 @@ func (h *CopyWriterHandle) receiver() error {
 	pkt := Packet{}
 	for {
 		copiedData := <-h.bufferChan
+		log.Debugf("Read packet, write out")
 		pkt.Ci = copiedData.ci
 		pkt.OutBuf = copiedData.buf
 		h.fh.WritePacketData(&pkt)

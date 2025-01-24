@@ -11,8 +11,10 @@ type CopySenderHandle struct {
 }
 
 func (h *CopySenderHandle) Init(conf *HandleConfig) error {
+	h.sh = &SocketHandle{}
 	h.sh.Init(conf)
 	h.bufferChan = make(chan PacketCopyBuffer, 32768)
+	go h.receiver()
 	return nil
 }
 
