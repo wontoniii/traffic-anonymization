@@ -21,8 +21,6 @@ type AModule struct {
 	privateNets bool
 	// Local network to anonymize
 	localNet string
-	// Destination to encapsulate
-	encapsulateDst string
 
 	// Local variable to store the packet processor
 	packetProcessor network.PacketProcessor
@@ -31,8 +29,6 @@ type AModule struct {
 	ctx *Cryptopan
 	// Local variable to know whether to anonymize local networks or not
 	hasLocalNet bool
-	// Local variable to know whether to encapsulate the destination or not
-	hasEncapsulateDst bool
 	// Private network variables
 	privateNetsCIDR []*net.IPNet
 	// Local network variable
