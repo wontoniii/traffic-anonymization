@@ -4,8 +4,8 @@
     "Ifname": "eth0"
   },
   "OutInterface": {
-    "Driver": "filewrite",
-    "Ifname": "test_data/test_local_anon.pcap"
+    "Driver": "filebufferedwrite",
+    "Ifname": "/tmp/test_local_anon.pcap"
   },
   "Misc": {
     "Anonymize": true,

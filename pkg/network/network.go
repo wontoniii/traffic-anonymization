@@ -8,16 +8,18 @@ import (
 )
 
 const (
-	HandleTypePFRingRead    = 0
-	HandleTypePcapRead      = 1
-	HandleTypeAFPacketRead  = 2
-	HandleTypeFileRead      = 3
-	HandleTypePFRingWrite   = 4
-	HandleTypePcapWrite     = 5
-	HandleTypeAFPacketWrite = 6
-	HandleTypeFileWrite     = 7
-	HandleTypeSocketRead    = 8
-	HandleTypeSocketWrite   = 9
+	HandleTypePFRingRead          = 0
+	HandleTypePcapRead            = 1
+	HandleTypeAFPacketRead        = 2
+	HandleTypeFileRead            = 3
+	HandleTypePFRingWrite         = 4
+	HandleTypePcapWrite           = 5
+	HandleTypeAFPacketWrite       = 6
+	HandleTypeFileWrite           = 7
+	HandleTypeSocketRead          = 8
+	HandleTypeSocketWrite         = 9
+	HandleTypeSocketBufferedWrite = 10
+	HandleTypeFileBufferedWrite   = 11
 )
 
 // BPF Filter for capturing DNS traffic only
@@ -136,6 +138,14 @@ func (ni *NetworkInterface) NewNetworkInterface(conf NetworkInterfaceConfigurati
 	} else if conf.Driver == "socketwrite" {
 		ni.HandleType = HandleTypeSocketWrite
 		ni.IfHandle = &SocketHandle{}
+		hc.W = true
+	} else if conf.Driver == "socketbufferedwrite" {
+		ni.HandleType = HandleTypeSocketBufferedWrite
+		ni.IfHandle = &CopySenderHandle{}
+		hc.W = true
+	} else if conf.Driver == "filebufferedwrite" {
+		ni.HandleType = HandleTypeFileBufferedWrite
+		ni.IfHandle = &CopyWriterHandle{}
 		hc.W = true
 	} else {
 		panic(errors.New("wrong interface driver type"))
