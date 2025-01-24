@@ -51,7 +51,7 @@ func (h *SocketHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 func (h *SocketHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to write packet to file")
 	// Write packet to socket
-	c, err := h.conn.WriteTo(pkt.RawData, h.dest)
+	c, err := h.conn.WriteTo(pkt.OutBuf.Bytes(), h.dest)
 	if err != nil {
 		log.Fatalf("Could not write the packet, error: %s", err)
 	} else {
