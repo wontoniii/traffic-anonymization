@@ -1,9 +1,6 @@
 package network
 
 import (
-	"bytes"
-	"encoding/binary"
-
 	"github.com/google/gopacket"
 	log "github.com/sirupsen/logrus"
 )
@@ -38,16 +35,8 @@ func (h *CopyWriterHandle) receiver() error {
 	for {
 		copiedData := <-h.bufferChan
 		log.Debugf("Read packet, write out")
-		timestampBytes := new(bytes.Buffer)
-		err := binary.Write(timestampBytes, binary.BigEndian, timestamp.UnixNano()) // Convert to nanoseconds
-		if err != nil {
-			log.Errorf("failed to serialize timestamp: %w", err)
-			return nil
-		}
-
 		pkt.Ci = copiedData.ci
 		pkt.OutBuf = copiedData.buf
-		pkt.OutBuf.AppendBytes(int(timestampBytes.Bytes()[]))
 		h.fh.WritePacketData(&pkt)
 	}
 }

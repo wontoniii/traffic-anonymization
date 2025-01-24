@@ -1,6 +1,8 @@
 package network
 
 import (
+	"bytes"
+	"encoding/binary"
 	"net"
 	"strconv"
 	"strings"
@@ -51,7 +53,13 @@ func (h *SocketHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 func (h *SocketHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to write packet to file")
 	// Write packet to socket
-	c, err := h.conn.WriteTo(pkt.OutBuf.Bytes(), h.dest)
+	timestampBytes := new(bytes.Buffer)
+	err := binary.Write(timestampBytes, binary.BigEndian, pkt.Ci.Timestamp.UnixNano()) // Convert to nanoseconds
+	if err != nil {
+		log.Errorf("failed to serialize timestamp: %w", err)
+		return nil
+	}
+	c, err := h.conn.WriteTo(append(timestampBytes.Bytes(), pkt.OutBuf.Bytes()...), h.dest)
 	if err != nil {
 		log.Fatalf("Could not write the packet, error: %s", err)
 	} else {
