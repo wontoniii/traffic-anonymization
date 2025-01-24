@@ -17,6 +17,7 @@ type PacketCopyBuffer struct {
 
 func (h *CopyWriterHandle) Init(conf *HandleConfig) error {
 	h.fh.Init(conf)
+	h.bufferChan = make(chan PacketCopyBuffer, 32768)
 	return nil
 }
 
