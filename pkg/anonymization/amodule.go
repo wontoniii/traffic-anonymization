@@ -138,28 +138,31 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 		if pkt.IsDNS {
 			err := pkt.Dns.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
+				return nil
 			}
 			log.Debugf("Added dns %d", len(pkt.OutBuf.Bytes()))
 		}
 		if pkt.IsTLS {
 			err := pkt.TLS.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
 			}
 			log.Debugf("Added tls %d", len(pkt.OutBuf.Bytes()))
 		}
 		if pkt.IsTCP {
 			err := pkt.Tcp.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
+				return nil
 			}
 			log.Debugf("Added tcp %d", len(pkt.OutBuf.Bytes()))
 		}
 		if pkt.IsUDP {
 			err := pkt.Udp.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
+				return nil
 			}
 			log.Debugf("Added udp %d", len(pkt.OutBuf.Bytes()))
 		}
@@ -168,7 +171,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 			pkt.Ip4.DstIP = net.ParseIP(pkt.DstIP)
 			err := pkt.Ip4.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
 			}
 			log.Debugf("Added ip4 %d", len(pkt.OutBuf.Bytes()))
 		}
@@ -177,7 +180,8 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 			pkt.Ip6.DstIP = net.ParseIP(pkt.DstIP)
 			err := pkt.Ip6.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
-				panic(err)
+				log.Error(err)
+				return nil
 			}
 			log.Debugf("Added ip6 %d", len(pkt.OutBuf.Bytes()))
 		}
