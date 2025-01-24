@@ -1,8 +1,6 @@
 package network
 
 import (
-	"bufio"
-	"fmt"
 	"net"
 	"strconv"
 	"strings"
@@ -52,7 +50,7 @@ func (h *SocketHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 
 func (h *SocketHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to write packet to file")
-	// Write packet to file
+	// Write packet to socket
 	c, err := h.conn.WriteToUDP(pkt.RawData, h.dest)
 	if err != nil {
 		log.Fatalf("Could not write the packet, error: %s", err)
@@ -72,21 +70,4 @@ func (h *SocketHandle) Stats() IfStats {
 func (h *SocketHandle) Close() error {
 	h.conn.Close()
 	return nil
-}
-
-func main() {
-	p := make([]byte, 2048)
-	conn, err := net.Dial("udp", "127.0.0.1:1234")
-	if err != nil {
-		fmt.Printf("Some error %v", err)
-		return
-	}
-	fmt.Fprintf(conn, "Hi UDP Server, How are you doing?")
-	_, err = bufio.NewReader(conn).Read(p)
-	if err == nil {
-		fmt.Printf("%s\n", p)
-	} else {
-		fmt.Printf("Some error %v\n", err)
-	}
-	conn.Close()
 }
