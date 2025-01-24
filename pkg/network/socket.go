@@ -18,7 +18,7 @@ type SocketHandle struct {
 	ClusterID int
 	FanOut    bool
 	W         bool
-	conn      *net.UDPConn
+	conn      net.PacketConn
 	dest      *net.UDPAddr
 }
 
@@ -30,7 +30,7 @@ func (h *SocketHandle) NewSocketInterface() {
 		Port: port,
 		IP:   net.ParseIP(ip),
 	}
-	h.conn, err = net.DialUDP("udp", nil, h.dest)
+	h.conn, err = net.ListenPacket("udp", h.dest.String())
 	if err != nil {
 		log.Fatalf("Could not create the socket, error: %s", err)
 	}
@@ -51,7 +51,7 @@ func (h *SocketHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 func (h *SocketHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to write packet to file")
 	// Write packet to socket
-	c, err := h.conn.WriteToUDP(pkt.RawData, h.dest)
+	c, err := h.conn.WriteTo(pkt.RawData, h.dest)
 	if err != nil {
 		log.Fatalf("Could not write the packet, error: %s", err)
 	} else {
