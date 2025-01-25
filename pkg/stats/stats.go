@@ -2,7 +2,8 @@ package stats
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
+	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -13,6 +14,7 @@ type IfStatsPrinter struct {
 	Interface *network.NetworkInterface
 	lastTime  int64
 	end       chan bool
+	name      string
 }
 
 type ParserStats struct {
@@ -30,9 +32,10 @@ type OutJson struct {
 	Data    json.RawMessage
 }
 
-func NewIfStatsPrinter(inter *network.NetworkInterface) *IfStatsPrinter {
+func NewIfStatsPrinter(inter *network.NetworkInterface, name string) *IfStatsPrinter {
 	cp := new(IfStatsPrinter)
 	cp.Interface = inter
+	cp.name = name
 	return cp
 }
 
@@ -72,14 +75,14 @@ func (cp *IfStatsPrinter) Generate() []byte {
 
 func (cp *IfStatsPrinter) Run() {
 	cp.end = make(chan bool, 1)
-	ticker := time.NewTicker(time.Duration(1 * time.Minute))
+	ticker := time.NewTicker(time.Duration(5 * time.Minute))
 	for {
 		select {
 		case <-cp.end:
 			return
 		case <-ticker.C:
 			s := cp.Generate()
-			err := ioutil.WriteFile("/tmp/ta_ifstats.out", s, 0644)
+			err := os.WriteFile(fmt.Sprintf("%s%s%s", "/tmp/", cp.name, "_ifstats.out"), s, 0644)
 			if err != nil {
 				log.Fatalf("Something went wrong writing statistics: %", err)
 			}

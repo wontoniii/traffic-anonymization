@@ -104,7 +104,7 @@ func main() {
 	anonymizer := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime, writer)
 
 	reader := network.NewReader(inni, anonymizer)
-	statsWriter := stats.NewIfStatsPrinter(inni)
+	statsWriter := stats.NewIfStatsPrinter(inni, "inif")
 	statsWriter.Init()
 
 	stop := make(chan struct{})
