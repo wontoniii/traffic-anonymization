@@ -208,6 +208,8 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 		} else {
 			log.Debugf("And the produced data len is %d", len(pkt.OutBuf.Bytes()))
 		}
+	} else {
+		log.Fatal("No support of passthrough at the moment")
 	}
 	am.packetProcessor.ProcessPacket(pkt)
 
