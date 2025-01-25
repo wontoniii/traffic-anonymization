@@ -43,7 +43,6 @@ func initAFPacket(device string, snaplen uint32, block_size uint32, num_blocks u
 		afpacket.OptFrameSize(snaplen),
 		afpacket.OptBlockSize(block_size),
 		afpacket.OptNumBlocks(num_blocks),
-		afpacket.OptPromiscuous(true),
 		afpacket.SocketRaw,
 		afpacket.TPacketVersion3); err != nil {
 		return nil, err
