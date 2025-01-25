@@ -4,8 +4,8 @@
     "Ifname": "eth0"
   },
   "OutInterface": {
-    "Driver": "filebufferedwrite",
-    "Ifname": "/tmp/test_anon.pcap"
+    "Driver": "socketbufferedwrite",
+    "Ifname": "140.77.15.2:38110"
   },
   "Misc": {
     "Anonymize": true,
