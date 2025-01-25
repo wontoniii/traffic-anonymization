@@ -127,9 +127,11 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 
 		am.mu.Lock()
 		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.SrcIP)) || am.hasLocalNet && is_src_local {
+			log.Debugf("Source is private, anonymize")
 			pkt.SrcIP = am.ctx.Anonymize(net.ParseIP(pkt.SrcIP)).String()
 		}
 		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.DstIP)) || am.hasLocalNet && is_dst_local {
+			log.Debugf("Destination is private, anonymize")
 			pkt.DstIP = am.ctx.Anonymize(net.ParseIP(pkt.DstIP)).String()
 		}
 		am.mu.Unlock()
