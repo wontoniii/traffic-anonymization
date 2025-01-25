@@ -1,4 +1,7 @@
 all:
+	go build -o traffic-anonymization cmd/traffic-anonymization/traffic-anonymization.go 
+
+ring:
 	go build -o traffic-anonymization -tags=pfring cmd/traffic-anonymization/traffic-anonymization.go 
 
 docker:

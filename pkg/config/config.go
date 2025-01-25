@@ -29,7 +29,7 @@ type MiscConfig struct {
 	Anonymize   bool
 	LoopTime    int
 	PrivateNets bool
-	LocalNet    string
+	LocalNets   []string
 	LogLevel    string
 }
 
@@ -73,6 +73,6 @@ func (conf *SysConfig) loadInterfacesConfig() {
 	conf.Misc.Anonymize = viper.GetBool("Misc.Anonymize")
 	conf.Misc.LoopTime = viper.GetInt("Misc.LoopTime")
 	conf.Misc.PrivateNets = viper.GetBool("Misc.PrivateNets")
-	conf.Misc.LocalNet = viper.GetString("Misc.LocalNet")
+	conf.Misc.LocalNets = viper.GetStringSlice("Misc.LocalNets")
 	conf.Misc.LogLevel = viper.GetString("Misc.LogLevel")
 }

@@ -5,13 +5,13 @@
   },
   "OutInterface": {
     "Driver": "filebufferedwrite",
-    "Ifname": "/tmp/test_local_anon.pcap"
+    "Ifname": "/tmp/test_anon.pcap"
   },
   "Misc": {
     "Anonymize": true,
-    "LocalNet": "140.77.0.0/16",
-    "PrivateNets": false,
+    "LocalNet": ["140.77.0.0/16", "192.33.162.0/24", "192.33.153.0/24,"],
+    "PrivateNets": true,
     "LoopTime": 2,
-    "LogLevel": "debug"
+    "LogLevel": "error"
   }
 }

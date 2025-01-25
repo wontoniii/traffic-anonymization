@@ -101,7 +101,7 @@ func main() {
 	outni.NewNetworkInterface(ifconf)
 
 	writer := network.NewWriter(outni)
-	anonymizer := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNet, conf.Misc.LoopTime, writer)
+	anonymizer := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime, writer)
 
 	reader := network.NewReader(inni, anonymizer)
 	statsWriter := stats.NewIfStatsPrinter(inni)

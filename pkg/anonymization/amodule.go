@@ -20,7 +20,7 @@ type AModule struct {
 	// Whether to anonymize private networks or not
 	privateNets bool
 	// Local network to anonymize
-	localNet string
+	localNets []string
 
 	// Local variable to store the packet processor
 	packetProcessor network.PacketProcessor
@@ -32,7 +32,7 @@ type AModule struct {
 	// Private network variables
 	privateNetsCIDR []*net.IPNet
 	// Local network variable
-	localNetCIDR *net.IPNet
+	localNetCIDRs []*net.IPNet
 	// Stop channel
 	stopChan chan struct{}
 	// Mutex to access cryptopan
@@ -40,7 +40,7 @@ type AModule struct {
 }
 
 // NewAModule
-func NewAModule(key string, anonymize bool, privateNets bool, localNet string, loopTime int, packetProcessor network.PacketProcessor) *AModule {
+func NewAModule(key string, anonymize bool, privateNets bool, localNets []string, loopTime int, packetProcessor network.PacketProcessor) *AModule {
 	ret := &AModule{}
 
 	var err error
@@ -60,10 +60,10 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNet string, l
 			ret.privateNetsCIDR = network.CIDRAllInit()
 		}
 
-		ret.localNet = localNet
-		if ret.localNet != "" {
-			_, ret.localNetCIDR, _ = network.ParseIP(ret.localNet)
+		ret.localNets = localNets
+		if len(ret.localNets) > 0 {
 			ret.hasLocalNet = true
+			ret.localNetCIDRs = network.ToNets(ret.localNets)
 		}
 
 		ret.stopChan = make(chan struct{})
@@ -116,8 +116,8 @@ func (am *AModule) Stop() error {
 // ProcessPacket processes incoming packets.
 func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 	if am.anonymize {
-		is_src_local := am.localNetCIDR.Contains(net.ParseIP(pkt.SrcIP))
-		is_dst_local := am.localNetCIDR.Contains(net.ParseIP(pkt.DstIP))
+		is_src_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.SrcIP))
+		is_dst_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.DstIP))
 		if is_src_local && is_dst_local && am.hasLocalNet {
 			log.Debugf("Both source and destination are private, dropping packet")
 			return nil

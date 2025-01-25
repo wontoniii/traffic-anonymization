@@ -53,17 +53,17 @@ func IsPrivateIP(privateIPBlocks []*net.IPNet, ip net.IP) bool {
 
 var RFC1918 = []string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}
 
-func ToNets(strNets []string) []net.IPNet {
-	var nets []net.IPNet
+func ToNets(strNets []string) []*net.IPNet {
+	var nets []*net.IPNet
 	for _, n := range strNets {
 		if _, net, err := net.ParseCIDR(n); err == nil {
-			nets = append(nets, *net)
+			nets = append(nets, net)
 		}
 	}
 	return nets
 }
 
-var RFC1918Nets []net.IPNet = ToNets(RFC1918)
+var RFC1918Nets []*net.IPNet = ToNets(RFC1918)
 
 func IsRFC1918(ip net.IP) bool {
 	for _, net := range RFC1918Nets {
