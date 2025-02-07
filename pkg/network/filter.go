@@ -1,6 +1,6 @@
 package network
 
-import "io/ioutil"
+import "os"
 
 type Filter struct {
 	FileName string
@@ -17,7 +17,7 @@ func LoadFilter(filename string) (*Filter, error) {
 }
 
 func (f *Filter) Reload() error {
-	buf, err := ioutil.ReadFile(f.FileName)
+	buf, err := os.ReadFile(f.FileName)
 	if err != nil {
 		return err
 	}
