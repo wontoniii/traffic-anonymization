@@ -27,7 +27,7 @@ func (e KeySizeError) Error() string {
 
 func CreateRandomKey() []byte {
 	key := make([]byte, 32)
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 32; i++ {
 		key[i] = byte(rand.Intn(255) + 1)
 	}
 	return key
