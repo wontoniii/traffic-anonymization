@@ -1,0 +1,17 @@
+{
+  "InInterface": {
+    "Driver": "pcapread",
+    "Ifname": "ens2f0np0"
+  },
+  "OutInterface": {
+    "Driver": "socketbufferedwrite",
+    "Ifname": "140.77.15.2:38110"
+  },
+  "Misc": {
+    "Anonymize": true,
+    "LocalNets": ["140.77.0.0/16", "192.33.162.0/24", "192.33.153.0/24,"],
+    "PrivateNets": true,
+    "LoopTime": 2,
+    "LogLevel": "error"
+  }
+}
