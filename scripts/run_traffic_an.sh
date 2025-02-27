@@ -5,7 +5,7 @@ PROGRAM="/home/sysens/traffic-anonymization/traffic-anonymization"
 USER="sysens"
 INSTANCE1_PARAMS="-conf /home/sysens/traffic-anonymization/config/config_an_ens_if1"
 INSTANCE2_PARAMS="-conf /home/sysens/traffic-anonymization/config/config_an_ens_if2"
-LOG_FILE="/var/log/program_monitor.log"
+LOG_FILE="/var/log/traffic_an.log"
 
 # Function to check if an instance is running
 check_instance() {
@@ -21,7 +21,7 @@ start_instance() {
     
     # Use nohup to prevent the process from being killed when the script exits
     # Redirect stdout and stderr to a log file and disconnect completely with &
-    su - "$USER" -c "nohup $PROGRAM $params > /tmp/ta_${params// /_}.log 2>&1 &"
+    su - "$USER" -c "nohup $PROGRAM $params > /var/log/ta_${params// /_}.log 2>&1 &"
 }
 
 # Check and restart instance 1 if needed

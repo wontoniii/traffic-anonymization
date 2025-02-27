@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Save script to a permanent location
-SCRIPT="/home/sysens/traffic-anonymization/traffic-anonymization/scripts/run_traffic_an.sh"
+SCRIPT="/home/sysens/traffic-anonymization/scripts/run_traffic_an.sh"
 SCRIPT_PATH="/home/sysens/run_traffic_an.sh"
 cp "$SCRIPT" "$SCRIPT_PATH"
 chmod +x "$SCRIPT_PATH"
