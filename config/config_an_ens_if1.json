@@ -5,7 +5,7 @@
   },
   "OutInterface": {
     "Driver": "socketbufferedwrite",
-    "Ifname": "140.77.15.2:38110"
+    "Ifname": "140.77.15.9:38110"
   },
   "Misc": {
     "Anonymize": true,
