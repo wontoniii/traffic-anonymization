@@ -7,5 +7,8 @@ ring:
 docker:
 	docker image build --tag traffic-anonymization:linux-amd64 -f build/package/Dockerfile .
 
+decapsulate:
+	go build -o decapsulate cmd/decapsulate/decapsulate.go 
+
 clean:
 	rm traffic-anonymization

@@ -1,0 +1,13 @@
+{
+  "InInterface": {
+    "Driver": "pcapread",
+    "Ifname": "ens10f1"
+  },
+  "OutInterface": {
+    "Driver": "filewrite",
+    "Ifname": "payload_only.pcap"
+  },
+  "Misc": {
+    "LogLevel": "error"
+  }
+}

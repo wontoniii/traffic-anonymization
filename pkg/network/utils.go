@@ -1,8 +1,11 @@
 package network
 
 import (
+	"encoding/binary"
 	"errors"
+	"fmt"
 	"net"
+	"time"
 	// log "github.com/sirupsen/logrus"
 )
 
@@ -96,4 +99,16 @@ func GetFirstInterface() (string, error) {
 		return "", errors.New("No interface found")
 	}
 	return iface.Name, nil
+}
+
+func bytesToTime(data []byte) (time.Time, error) {
+	if len(data) != 8 {
+		return time.Time{}, fmt.Errorf("expected 8 bytes for timestamp, got %d", len(data))
+	}
+
+	nanoseconds := binary.BigEndian.Uint64(data)
+	seconds := nanoseconds / 1000000000
+	remainingNanos := nanoseconds % 1000000000
+
+	return time.Unix(int64(seconds), int64(remainingNanos)), nil
 }
