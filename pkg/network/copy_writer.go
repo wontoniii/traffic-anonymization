@@ -111,7 +111,7 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 						log.Panic("Error renaming file:", err)
 					}
 					now := time.Now()
-					now = now.Add(delay)
+					now = now.Add(CYCLE_TIME)
 					config.Name = h.basename + "_" + now.Format("2006-01-02_15:04:05")
 					fh := &FileHandle{}
 					fh.Init(&config)
