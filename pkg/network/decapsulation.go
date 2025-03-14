@@ -45,7 +45,6 @@ func (am *DecapsulateModule) ProcessPacket(pkt *Packet) error {
 	}
 
 	if pkt.Ci.Length != len(pkt.OutBuf.Bytes()) {
-		log.Errorf("The packet length is different than the produced data len, src %s, dst %s", pkt.SrcIP, pkt.DstIP)
 		pkt.Ci.Length = len(pkt.OutBuf.Bytes())
 	} else {
 		log.Debugf("And the produced data len is %d", len(pkt.OutBuf.Bytes()))

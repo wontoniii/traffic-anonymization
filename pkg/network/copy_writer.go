@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const CYCLE_TIME time.Duration = time.Second * 60
+const CYCLE_TIME time.Duration = time.Minute * 60
 
 type CopyWriterHandle struct {
 	// fh1        *FileHandle
