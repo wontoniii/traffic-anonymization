@@ -89,6 +89,7 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 			}
 		case <-h.swapChans[id]:
 			// Drain the packets in the channel
+			log.Infof("Start draining %d", id)
 			for {
 				select {
 				case copiedData, ok := <-h.bufferChans[id]:
@@ -103,6 +104,7 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 					fh.WritePacketData(&pkt)
 				default:
 					// Channel is empty, prepare new pcap file for the future
+					log.Infof("Finished draining %d", id)
 					fh.Close()
 					err := os.Rename(config.Name, config.Name+".pcap")
 					if err != nil {
@@ -130,9 +132,9 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 
 func (h *CopyWriterHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to pass the packet to the other thread")
-	//TODO Handle timer to swap where to write
 	now := time.Now()
 	if now.After(h.deadline) {
+		log.Infof("Deadline is passed, moving from %d", h.current)
 		h.swapChans[h.current] <- true
 		h.current = (h.current + 1) % 2
 		h.deadline = now.Add(CYCLE_TIME)
