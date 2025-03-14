@@ -100,9 +100,9 @@ func main() {
 	outni.NewNetworkInterface(ifconf)
 
 	writer := network.NewWriter(outni)
-	anonymizer := network.NewDecapsulateModule(writer)
+	decapsulation := network.NewDecapsulateModule(writer)
 
-	reader := network.NewReader(inni, anonymizer)
+	reader := network.NewReader(inni, decapsulation)
 	statsWriter := stats.NewIfStatsPrinter(inni, "inif")
 	statsWriter.Init()
 

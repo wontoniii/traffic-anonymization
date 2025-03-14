@@ -11,4 +11,4 @@ decapsulate:
 	go build -o decapsulate cmd/decapsulate/decapsulate.go 
 
 clean:
-	rm traffic-anonymization
+	rm traffic-anonymization decapsulate

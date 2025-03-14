@@ -4,8 +4,8 @@
     "Ifname": "ens10f1"
   },
   "OutInterface": {
-    "Driver": "filewrite",
-    "Ifname": "payload_only.pcap"
+    "Driver": "filebufferedwrite",
+    "Ifname": "campus_traffic.pcap"
   },
   "Misc": {
     "LogLevel": "error"
