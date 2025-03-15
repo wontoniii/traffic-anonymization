@@ -62,7 +62,8 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 	pkt := Packet{}
 	now := time.Now()
 	now = now.Add(delay)
-	config := h.configCopy
+	config := HandleConfig{}
+	config.W = true
 	config.Name = h.basename + "_" + now.Format("2006-01-02_15:04:05")
 	fh := &FileHandle{}
 	fh.Init(&config)
@@ -90,6 +91,7 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 		case <-h.swapChans[id]:
 			// Drain the packets in the channel
 			log.Infof("Start draining %d", id)
+		loop:
 			for {
 				select {
 				case copiedData, ok := <-h.bufferChans[id]:
@@ -113,9 +115,10 @@ func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
 					now := time.Now()
 					now = now.Add(CYCLE_TIME)
 					config.Name = h.basename + "_" + now.Format("2006-01-02_15:04:05")
-					fh := &FileHandle{}
+					log.Infof("Moving %d to file %s", id, config.Name)
+					fh = &FileHandle{}
 					fh.Init(&config)
-					break
+					break loop
 				}
 			}
 
