@@ -13,8 +13,6 @@ import (
 const CYCLE_TIME time.Duration = time.Minute * 60
 
 type CopyWriterHandle struct {
-	// fh1        *FileHandle
-	// fh2        *FileHandle
 	basename    string
 	configCopy  HandleConfig
 	current     int
@@ -56,8 +54,6 @@ func (h *CopyWriterHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error
 }
 
 func (h *CopyWriterHandle) receiver(id, delay time.Duration) error {
-	// This sends out the data
-	// TODO Rotate write out file every hour
 	defer h.wg.Done()
 	pkt := Packet{}
 	now := time.Now()
