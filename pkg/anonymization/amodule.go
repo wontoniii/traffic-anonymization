@@ -119,7 +119,7 @@ func isTLSHandshake(tcp *layers.TCP) bool {
 	bp := tcp.LayerPayload()
 	// Not enough data for TLS header
 	if len(bp) < 5 {
-		log.Warnf("Not enough data for TLS header")
+		log.Debugf("Not enough data for TLS header")
 		return false
 	}
 
@@ -131,7 +131,7 @@ func isTLSHandshake(tcp *layers.TCP) bool {
 
 	// Check for TLS Content Type: Handshake (22)
 	if bp[0] == 22 {
-		log.Warnf("TLS Content Type detected: %x", bp[0])
+		log.Debugf("TLS Content Type detected: %x", bp[0])
 		// Common TLS versions
 		isVersion := (bp[1] == 3) &&
 			(bp[2] == 1 || // TLS 1.0
@@ -140,7 +140,7 @@ func isTLSHandshake(tcp *layers.TCP) bool {
 				bp[2] == 4) // TLS 1.3 draft versions
 
 		if isVersion {
-			log.Warnf("TLS version detected: %x %x", bp[1], bp[2])
+			log.Debugf("TLS version detected: %x %x", bp[1], bp[2])
 			// If we want to dig deeper, we can check the handshake type at payload[5]
 			// 1: ClientHello, 2: ServerHello, etc.
 			if len(bp) > 5 {
@@ -151,7 +151,7 @@ func isTLSHandshake(tcp *layers.TCP) bool {
 			return true
 		}
 	}
-	log.Warnf("Not a TLS handshake")
+	log.Debugf("Not a TLS handshake")
 
 	return false
 }
@@ -255,7 +255,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 		if pkt.IsTCP {
 			// Check if the payload is a TLS handshake
 			if isTLSHandshake(pkt.Tcp) {
-				log.Warnf("TLS handshake detected")
+				log.Debugf("TLS handshake detected")
 				err := gopacket.Payload(pkt.Tcp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
 				if err != nil {
 					log.Error(err)
@@ -273,7 +273,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 		if pkt.IsUDP {
 			// Check if the payload is a TLS handshake
 			if !pkt.IsDNS && isQUICHandshake(pkt.Udp) {
-				log.Warnf("QUIC handshake detected")
+				log.Debugf("QUIC handshake detected")
 				err := gopacket.Payload(pkt.Udp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
 				if err != nil {
 					log.Error(err)
