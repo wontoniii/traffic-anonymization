@@ -63,7 +63,7 @@ func (tp *Reader) Parse(wg *sync.WaitGroup, stop chan struct{}) {
 	var isValid bool
 	var parsingErr error
 
-	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.TLS, pkt.Dns, pkt.Payload)
+	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.Dns, pkt.Payload)
 	decoded := []gopacket.LayerType{}
 	if wg != nil {
 		defer wg.Done()

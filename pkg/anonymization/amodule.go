@@ -1,6 +1,7 @@
 package anonymization
 
 import (
+	"bytes"
 	"net"
 	"sync"
 	"time"
@@ -113,6 +114,111 @@ func (am *AModule) Stop() error {
 	return nil
 }
 
+// isTLSHandshake examines a packet to determine if it contains a TLS handshake message
+func isTLSHandshake(tcp *layers.TCP) bool {
+	bp := tcp.LayerPayload()
+	// Not enough data for TLS header
+	if len(bp) < 5 {
+		log.Warnf("Not enough data for TLS header")
+		return false
+	}
+
+	// Check if this is a TLS record
+	// TLS Record format:
+	// Byte 0: Content Type (22 = Handshake)
+	// Bytes 1-2: Version (0x0301 = TLS 1.0, 0x0302 = TLS 1.1, 0x0303 = TLS 1.2/1.3)
+	// Bytes 3-4: Length
+
+	// Check for TLS Content Type: Handshake (22)
+	if bp[0] == 22 {
+		log.Warnf("TLS Content Type detected: %x", bp[0])
+		// Common TLS versions
+		isVersion := (bp[1] == 3) &&
+			(bp[2] == 1 || // TLS 1.0
+				bp[2] == 2 || // TLS 1.1
+				bp[2] == 3 || // TLS 1.2 or 1.3
+				bp[2] == 4) // TLS 1.3 draft versions
+
+		if isVersion {
+			log.Warnf("TLS version detected: %x %x", bp[1], bp[2])
+			// If we want to dig deeper, we can check the handshake type at payload[5]
+			// 1: ClientHello, 2: ServerHello, etc.
+			if len(bp) > 5 {
+				handshakeType := bp[5]
+				// Only interested in the main handshake messages (ClientHello, ServerHello, etc.)
+				return handshakeType >= 1 && handshakeType <= 4
+			}
+			return true
+		}
+	}
+	log.Warnf("Not a TLS handshake")
+
+	return false
+}
+
+// isQUICHandshake examines a packet to determine if it contains a QUIC handshake message
+func isQUICHandshake(udp *layers.UDP) bool {
+	bp := udp.LayerPayload()
+
+	// Not enough data for QUIC header
+	if len(bp) < 5 {
+		return false
+	}
+
+	// Check for QUIC version 1 long header format
+	// First byte:
+	// Bits 0-3: Header Form (1 for long header)
+	// Bits 4-5: Fixed Bits (always 0 in v1)
+	// Bits 6-7: Packet Type (0 for Initial)
+	headerByte := bp[0]
+
+	// Check if it's a long header packet (most significant bit is 1)
+	isLongHeader := (headerByte & 0x80) != 0
+	if !isLongHeader {
+		return false // Short header packets aren't handshakes
+	}
+
+	// Extract packet type from bits 4-5 of first byte (for QUIC v1)
+	// In QUIC v1: 0=Initial, 1=0-RTT, 2=Handshake, 3=Retry
+	packetType := (headerByte & 0x30) >> 4
+
+	// Version field is bytes 1-4
+	versionBytes := bp[1:5]
+
+	// Check for version negotiation packet (special case)
+	if versionBytes[0] == 0 && versionBytes[1] == 0 && versionBytes[2] == 0 && versionBytes[3] == 0 {
+		return true // Version Negotiation packets are part of handshake process
+	}
+
+	// Check for QUIC v1 (0x00000001)
+	isQUICv1 := versionBytes[0] == 0 && versionBytes[1] == 0 &&
+		versionBytes[2] == 0 && versionBytes[3] == 1
+
+	// Check for draft versions (0xff000000 to 0xffffffff)
+	isDraft := versionBytes[0] == 0xff
+
+	// Google's Q050 and Q051 (older but still in use)
+	isGoogleQUIC := bytes.Equal(versionBytes, []byte("Q050")) ||
+		bytes.Equal(versionBytes, []byte("Q051"))
+
+	if !(isQUICv1 || isDraft || isGoogleQUIC) {
+		return false // Unknown version
+	}
+
+	// In QUIC v1 and most drafts, packet types 0 (Initial) and 2 (Handshake)
+	// are handshake packets
+	if isQUICv1 && (packetType == 0 || packetType == 2) {
+		return true
+	}
+
+	// For draft versions we're a bit more permissive
+	if isDraft && packetType <= 2 {
+		return true
+	}
+
+	return false
+}
+
 // ProcessPacket processes incoming packets.
 func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 	if am.anonymize {
@@ -145,28 +251,42 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 			}
 			log.Debugf("Added dns %d", len(pkt.OutBuf.Bytes()))
 		}
-		if pkt.IsTLS {
-			err := pkt.TLS.SerializeTo(pkt.OutBuf, options)
-			if err != nil {
-				log.Error(err)
-			}
-			log.Debugf("Added tls %d", len(pkt.OutBuf.Bytes()))
-		}
+
 		if pkt.IsTCP {
+			// Check if the payload is a TLS handshake
+			if isTLSHandshake(pkt.Tcp) {
+				log.Warnf("TLS handshake detected")
+				err := gopacket.Payload(pkt.Tcp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
+				if err != nil {
+					log.Error(err)
+					return nil
+				}
+			}
 			err := pkt.Tcp.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
 				log.Error(err)
 				return nil
 			}
 			log.Debugf("Added tcp %d", len(pkt.OutBuf.Bytes()))
+
 		}
 		if pkt.IsUDP {
+			// Check if the payload is a TLS handshake
+			if !pkt.IsDNS && isQUICHandshake(pkt.Udp) {
+				log.Warnf("QUIC handshake detected")
+				err := gopacket.Payload(pkt.Udp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
+				if err != nil {
+					log.Error(err)
+					return nil
+				}
+			}
 			err := pkt.Udp.SerializeTo(pkt.OutBuf, options)
 			if err != nil {
 				log.Error(err)
 				return nil
 			}
 			log.Debugf("Added udp %d", len(pkt.OutBuf.Bytes()))
+
 		}
 		if pkt.IsIPv4 {
 			pkt.Ip4.SrcIP = net.ParseIP(pkt.SrcIP)
