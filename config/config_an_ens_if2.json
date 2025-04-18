@@ -1,7 +1,7 @@
 {
   "InInterface": {
     "Driver": "pcapread",
-    "Ifname": "ens2f1np1"
+    "Ifname": "ens2f1"
   },
   "OutInterface": {
     "Driver": "socketbufferedwrite",
