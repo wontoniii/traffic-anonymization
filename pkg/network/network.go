@@ -20,6 +20,7 @@ const (
 	HandleTypeSocketWrite         = 9
 	HandleTypeSocketBufferedWrite = 10
 	HandleTypeFileBufferedWrite   = 11
+	HandleTypeDrop                = 12
 )
 
 // BPF Filter for capturing DNS traffic only
@@ -146,6 +147,10 @@ func (ni *NetworkInterface) NewNetworkInterface(conf NetworkInterfaceConfigurati
 	} else if conf.Driver == "filebufferedwrite" {
 		ni.HandleType = HandleTypeFileBufferedWrite
 		ni.IfHandle = &CopyWriterHandle{}
+		hc.W = true
+	} else if conf.Driver == "drop" {
+		ni.HandleType = HandleTypeDrop
+		ni.IfHandle = &DropHandle{}
 		hc.W = true
 	} else {
 		panic(errors.New("wrong interface driver type"))
