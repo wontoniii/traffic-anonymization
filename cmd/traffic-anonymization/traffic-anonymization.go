@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"strings"
@@ -74,21 +75,8 @@ func main() {
 	outb, _ := json.Marshal(conf)
 	log.Infof("Running with configuration:\n%s\n", outb)
 
-	inni := new(network.NetworkInterface)
-	ifconf := network.NetworkInterfaceConfiguration{
-		Driver:    conf.InIf.Driver,
-		Name:      conf.InIf.Ifname,
-		Filter:    conf.InIf.Filter,
-		SnapLen:   1600,
-		Clustered: conf.InIf.Clustered,
-		ClusterID: conf.InIf.ClusterID,
-		ZeroCopy:  conf.InIf.ZeroCopy,
-		FanOut:    conf.InIf.FanOut,
-	}
-	inni.NewNetworkInterface(ifconf)
-
 	outni := new(network.NetworkInterface)
-	ifconf = network.NetworkInterfaceConfiguration{
+	ifconf := network.NetworkInterfaceConfiguration{
 		Driver:    conf.OutIf.Driver,
 		Name:      conf.OutIf.Ifname,
 		Filter:    conf.OutIf.Filter,
@@ -103,13 +91,60 @@ func main() {
 	writer := network.NewWriter(outni)
 	anonymizer := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime, writer)
 
-	reader := network.NewReader(inni, anonymizer)
-	statsWriter := stats.NewIfStatsPrinter(inni, "inif")
-	statsWriter.Init()
+	// inni := new(network.NetworkInterface)
+	// ifconf = network.NetworkInterfaceConfiguration{
+	// 	Driver:    conf.InIf.Driver,
+	// 	Name:      conf.InIf.Ifname,
+	// 	Filter:    conf.InIf.Filter,
+	// 	SnapLen:   1600,
+	// 	Clustered: conf.InIf.Clustered,
+	// 	ClusterID: conf.InIf.ClusterID,
+	// 	ZeroCopy:  conf.InIf.ZeroCopy,
+	// 	FanOut:    conf.InIf.FanOut,
+	// }
+	// inni.NewNetworkInterface(ifconf)
+	// reader := network.NewReader(inni, anonymizer)
+	// statsWriter := stats.NewIfStatsPrinter(inni, "inif")
+	// statsWriter.Init()
 
-	stop := make(chan struct{})
-	go reader.Parse(nil, stop)
-	go statsWriter.Run()
+	// this needs to become a slice as well
+
+	var numInstances int
+
+	if conf.InIf.Clustered && conf.InIf.ClusterN > 1 && conf.InIf.Driver == "ringread" {
+		numInstances = conf.InIf.ClusterN
+	} else {
+		numInstances = 1
+	}
+	stops := make([]chan struct{}, numInstances)
+	innis := make([]*network.NetworkInterface, numInstances)
+	readers := make([]*network.Reader, numInstances)
+	statsWriters := make([]*stats.IfStatsPrinter, numInstances)
+
+	// Initialize each instance
+	for i := 0; i < numInstances; i++ {
+		innis[i] = new(network.NetworkInterface)
+
+		ifconf := network.NetworkInterfaceConfiguration{
+			Driver:    conf.InIf.Driver,
+			Name:      conf.InIf.Ifname, // Make names unique
+			Filter:    conf.InIf.Filter,
+			SnapLen:   1600,
+			Clustered: conf.InIf.Clustered,
+			ClusterID: conf.InIf.ClusterID,
+			ZeroCopy:  conf.InIf.ZeroCopy,
+			FanOut:    conf.InIf.FanOut,
+		}
+
+		innis[i].NewNetworkInterface(ifconf)
+		readers[i] = network.NewReader(innis[i], anonymizer)
+		statsWriters[i] = stats.NewIfStatsPrinter(innis[i], fmt.Sprintf("inif_%d", i))
+		statsWriters[i].Init()
+
+		stops[i] = make(chan struct{})
+		go readers[i].Parse(nil, stops[i])
+		go statsWriters[i].Run()
+	}
 
 	c := make(chan os.Signal, 5)
 	signal.Notify(c, os.Interrupt, syscall.SIGINT)
@@ -117,8 +152,10 @@ func main() {
 
 	log.Infof("System running")
 	<-c
-	stop <- struct{}{}
-	inni.IfHandle.Close()
+	for i := 0; i < numInstances; i++ {
+		stops[i] <- struct{}{}
+		innis[i].IfHandle.Close()
+		statsWriters[i].Stop()
+	}
 	outni.IfHandle.Close()
-	statsWriter.Stop()
 }

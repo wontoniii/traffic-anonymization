@@ -1,9 +1,9 @@
 {
   "InInterface": {
     "Driver": "ringread",
-    "Ifname": "ens2f1",
+    "Ifname": "ens2f0",
     "Clustered": true,
-    "ClusterID": 2,
+    "ClusterID": 1,
     "ClusterN": 4
   },
   "OutInterface": {
@@ -12,7 +12,7 @@
   },
   "Misc": {
     "Anonymize": true,
-    "LocalNets": ["140.77.0.0/16", "192.33.162.0/24", "192.33.153.0/24"],
+    "LocalNets": ["0.0.0.0/0"],
     "PrivateNets": true,
     "LoopTime": 2,
     "LogLevel": "error"

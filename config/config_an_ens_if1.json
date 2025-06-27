@@ -1,7 +1,10 @@
 {
   "InInterface": {
-    "Driver": "pcapread",
-    "Ifname": "ens2f0"
+    "Driver": "ringread",
+    "Ifname": "ens2f0",
+    "Clustered": true,
+    "ClusterID": 1,
+    "ClusterN": 4
   },
   "OutInterface": {
     "Driver": "socketbufferedwrite",
