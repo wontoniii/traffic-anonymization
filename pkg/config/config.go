@@ -63,7 +63,7 @@ func (conf *SysConfig) loadInterfacesConfig() {
 	conf.InIf.Driver = viper.GetString("InInterface.Driver")
 	conf.InIf.Clustered = viper.GetBool("InInterface.Clustered")
 	conf.InIf.ClusterID = viper.GetInt("InInterface.ClusterID")
-	conf.InIf.ClusterN = viper.GetInt("InInterface.ClusterID")
+	conf.InIf.ClusterN = viper.GetInt("InInterface.ClusterN")
 	conf.InIf.ZeroCopy = viper.GetBool("InInterface.ZeroCopy")
 	conf.InIf.Ifname = viper.GetString("InInterface.Ifname")
 	conf.InIf.Filter = viper.GetString("InInterface.Filter")

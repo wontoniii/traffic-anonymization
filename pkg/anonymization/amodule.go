@@ -23,9 +23,6 @@ type AModule struct {
 	// Local network to anonymize
 	localNets []string
 
-	// Local variable to store the packet processor
-	packetProcessor network.PacketProcessor
-
 	// Local variable to store the Cryptopan context
 	ctx *Cryptopan
 	// Local variable to know whether to anonymize local networks or not
@@ -37,11 +34,11 @@ type AModule struct {
 	// Stop channel
 	stopChan chan struct{}
 	// Mutex to access cryptopan
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // NewAModule
-func NewAModule(key string, anonymize bool, privateNets bool, localNets []string, loopTime int, packetProcessor network.PacketProcessor) *AModule {
+func NewAModule(key string, anonymize bool, privateNets bool, localNets []string, loopTime int) *AModule {
 	ret := &AModule{}
 
 	var err error
@@ -102,8 +99,6 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNets []string
 		}()
 
 	}
-
-	ret.packetProcessor = packetProcessor
 
 	log.Debugln("AModule initialized correctly")
 	return ret
@@ -219,8 +214,8 @@ func isQUICHandshake(udp *layers.UDP) bool {
 	return false
 }
 
-// ProcessPacket processes incoming packets.
-func (am *AModule) ProcessPacket(pkt *network.Packet) error {
+// Anonymize processes incoming packets.
+func (am *AModule) Anonymize(pkt *network.Packet) error {
 	if am.anonymize {
 		is_src_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.SrcIP))
 		is_dst_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.DstIP))
@@ -231,7 +226,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 
 		pkt.OutBuf = gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)
 
-		am.mu.Lock()
+		am.mu.RLock()
 		if am.privateNets && network.IsPrivateIP(am.privateNetsCIDR, net.ParseIP(pkt.SrcIP)) || am.hasLocalNet && is_src_local {
 			log.Debugf("Source is private, anonymize")
 			pkt.SrcIP = am.ctx.Anonymize(net.ParseIP(pkt.SrcIP)).String()
@@ -240,7 +235,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 			log.Debugf("Destination is private, anonymize")
 			pkt.DstIP = am.ctx.Anonymize(net.ParseIP(pkt.DstIP)).String()
 		}
-		am.mu.Unlock()
+		am.mu.RUnlock()
 
 		options := gopacket.SerializeOptions{}
 		if pkt.IsDNS {
@@ -322,7 +317,7 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 
 		log.Debugf("Added eth %d", len(pkt.OutBuf.Bytes()))
 		if pkt.Ci.Length < len(pkt.OutBuf.Bytes()) {
-			log.Errorf("The packet length is smaller than the produced data len, src %s, dst %s", pkt.SrcIP, pkt.DstIP)
+			log.Debugf("The packet length is smaller than the produced data len, src %s, dst %s", pkt.SrcIP, pkt.DstIP)
 			pkt.Ci.Length = len(pkt.OutBuf.Bytes())
 			// return nil
 		} else {
@@ -331,7 +326,6 @@ func (am *AModule) ProcessPacket(pkt *network.Packet) error {
 	} else {
 		log.Fatal("No support of passthrough at the moment")
 	}
-	am.packetProcessor.ProcessPacket(pkt)
 
 	return nil
 

@@ -5,15 +5,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type PacketPointer struct {
+	ci  gopacket.CaptureInfo
+	buf *gopacket.SerializeBuffer
+}
+
 type CopySenderHandle struct {
 	sh         *SocketHandle
-	bufferChan chan PacketCopyBuffer
+	bufferChan chan PacketPointer
 }
 
 func (h *CopySenderHandle) Init(conf *HandleConfig) error {
 	h.sh = &SocketHandle{}
 	h.sh.Init(conf)
-	h.bufferChan = make(chan PacketCopyBuffer, 32768)
+	h.bufferChan = make(chan PacketPointer, 32768)
 	go h.receiver()
 	return nil
 }
@@ -29,7 +34,7 @@ func (h *CopySenderHandle) receiver() error {
 	for {
 		copiedData := <-h.bufferChan
 		pkt.Ci = copiedData.ci
-		pkt.OutBuf = copiedData.buf
+		pkt.OutBuf = *copiedData.buf
 		h.sh.WritePacketData(&pkt)
 	}
 }
@@ -37,9 +42,9 @@ func (h *CopySenderHandle) receiver() error {
 func (h *CopySenderHandle) WritePacketData(pkt *Packet) error {
 	log.Debugf("Preparing to pass the packet to the other thread")
 	// Write packet to file
-	buf := PacketCopyBuffer{
+	buf := PacketPointer{
 		ci:  pkt.Ci,
-		buf: pkt.OutBuf,
+		buf: &pkt.OutBuf,
 	}
 	h.bufferChan <- buf
 	return nil

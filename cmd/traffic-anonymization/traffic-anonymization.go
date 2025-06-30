@@ -75,39 +75,7 @@ func main() {
 	outb, _ := json.Marshal(conf)
 	log.Infof("Running with configuration:\n%s\n", outb)
 
-	outni := new(network.NetworkInterface)
-	ifconf := network.NetworkInterfaceConfiguration{
-		Driver:    conf.OutIf.Driver,
-		Name:      conf.OutIf.Ifname,
-		Filter:    conf.OutIf.Filter,
-		SnapLen:   1600,
-		Clustered: conf.OutIf.Clustered,
-		ClusterID: conf.OutIf.ClusterID,
-		ZeroCopy:  conf.OutIf.ZeroCopy,
-		FanOut:    conf.OutIf.FanOut,
-	}
-	outni.NewNetworkInterface(ifconf)
-
-	writer := network.NewWriter(outni)
-	anonymizer := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime, writer)
-
-	// inni := new(network.NetworkInterface)
-	// ifconf = network.NetworkInterfaceConfiguration{
-	// 	Driver:    conf.InIf.Driver,
-	// 	Name:      conf.InIf.Ifname,
-	// 	Filter:    conf.InIf.Filter,
-	// 	SnapLen:   1600,
-	// 	Clustered: conf.InIf.Clustered,
-	// 	ClusterID: conf.InIf.ClusterID,
-	// 	ZeroCopy:  conf.InIf.ZeroCopy,
-	// 	FanOut:    conf.InIf.FanOut,
-	// }
-	// inni.NewNetworkInterface(ifconf)
-	// reader := network.NewReader(inni, anonymizer)
-	// statsWriter := stats.NewIfStatsPrinter(inni, "inif")
-	// statsWriter.Init()
-
-	// this needs to become a slice as well
+	amodule := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime)
 
 	var numInstances int
 
@@ -117,15 +85,37 @@ func main() {
 		numInstances = 1
 	}
 	stops := make([]chan struct{}, numInstances)
+	outnis := make([]*network.NetworkInterface, numInstances)
+	writers := make([]*network.Writer, numInstances)
+	anonymizers := make([]*anonymization.Anonymizer, numInstances)
 	innis := make([]*network.NetworkInterface, numInstances)
 	readers := make([]*network.Reader, numInstances)
 	statsWriters := make([]*stats.IfStatsPrinter, numInstances)
 
+	log.Infof("Starting with %d input interface instances", numInstances)
+
 	// Initialize each instance
 	for i := 0; i < numInstances; i++ {
+		outnis[i] = new(network.NetworkInterface)
+		ifconf := network.NetworkInterfaceConfiguration{
+			Driver:    conf.OutIf.Driver,
+			Name:      conf.OutIf.Ifname,
+			Filter:    conf.OutIf.Filter,
+			SnapLen:   1600,
+			Clustered: conf.OutIf.Clustered,
+			ClusterID: conf.OutIf.ClusterID,
+			ZeroCopy:  conf.OutIf.ZeroCopy,
+			FanOut:    conf.OutIf.FanOut,
+		}
+		outnis[i].NewNetworkInterface(ifconf)
+
+		writers[i] = network.NewWriter(outnis[i])
+
+		anonymizers[i] = anonymization.NewAnonymizer(amodule, writers[i])
+
 		innis[i] = new(network.NetworkInterface)
 
-		ifconf := network.NetworkInterfaceConfiguration{
+		ifconf = network.NetworkInterfaceConfiguration{
 			Driver:    conf.InIf.Driver,
 			Name:      conf.InIf.Ifname, // Make names unique
 			Filter:    conf.InIf.Filter,
@@ -137,7 +127,7 @@ func main() {
 		}
 
 		innis[i].NewNetworkInterface(ifconf)
-		readers[i] = network.NewReader(innis[i], anonymizer)
+		readers[i] = network.NewReader(innis[i], anonymizers[i])
 		statsWriters[i] = stats.NewIfStatsPrinter(innis[i], fmt.Sprintf("inif_%d", i))
 		statsWriters[i].Init()
 
@@ -156,6 +146,6 @@ func main() {
 		stops[i] <- struct{}{}
 		innis[i].IfHandle.Close()
 		statsWriters[i].Stop()
+		outnis[i].IfHandle.Close()
 	}
-	outni.IfHandle.Close()
 }
