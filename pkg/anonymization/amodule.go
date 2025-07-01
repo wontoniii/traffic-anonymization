@@ -219,7 +219,7 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 	if am.anonymize {
 		is_src_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.SrcIP))
 		is_dst_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.DstIP))
-		if is_src_local && is_dst_local && am.hasLocalNet {
+		if is_src_local && is_dst_local && am.hasLocalNet && !pkt.IsDNS {
 			log.Debugf("Both source and destination are private, dropping packet")
 			return &net.AddrError{}
 		}
