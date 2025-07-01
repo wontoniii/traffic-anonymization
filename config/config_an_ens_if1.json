@@ -7,7 +7,7 @@
     "ClusterN": 14
   },
   "OutInterface": {
-    "Driver": "socketbufferedwrite",
+    "Driver": "socketwrite",
     "Ifname": "140.77.15.9:38110"
   },
   "Misc": {

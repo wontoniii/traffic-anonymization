@@ -128,7 +128,7 @@ func main() {
 
 		innis[i].NewNetworkInterface(ifconf)
 		readers[i] = network.NewReader(innis[i], anonymizers[i])
-		statsWriters[i] = stats.NewIfStatsPrinter(innis[i], fmt.Sprintf("inif_%d", i))
+		statsWriters[i] = stats.NewIfStatsPrinter(innis[i], fmt.Sprintf("inif_%s_%d", ifconf.Name, i))
 		statsWriters[i].Init()
 
 		stops[i] = make(chan struct{})

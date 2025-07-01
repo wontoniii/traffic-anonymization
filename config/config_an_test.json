@@ -4,7 +4,7 @@
     "Ifname": "ens2f1",
     "Clustered": true,
     "ClusterID": 1,
-    "ClusterN": 30
+    "ClusterN": 14
   },
   "OutInterface": {
     "Driver": "socketwrite",
