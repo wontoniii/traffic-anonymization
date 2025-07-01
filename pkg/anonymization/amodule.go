@@ -221,7 +221,7 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 		is_dst_local := network.IsPrivateIP(am.localNetCIDRs, net.ParseIP(pkt.DstIP))
 		if is_src_local && is_dst_local && am.hasLocalNet {
 			log.Debugf("Both source and destination are private, dropping packet")
-			return nil
+			return &net.AddrError{}
 		}
 
 		pkt.OutBuf = gopacket.NewSerializeBufferExpectedSize(len(pkt.RawData), 0)

@@ -78,7 +78,7 @@ func (h *RingHandle) Init(conf *HandleConfig) error {
 	h.SnapLen = conf.SnapLen
 	h.Filter = conf.Filter
 	if conf.Clustered {
-		// cluster_round_robin ClusterPerFlow5Tuple cluster_per_flow
+		// ClusterRoundRobin ClusterPerFlow5Tuple cluster_per_flow
 		h.newClusteredRingInterface(conf.ClusterID, pfring.ClusterRoundRobin)
 	} else if conf.ZeroCopy {
 		h.newZeroCopyRingInterface()
