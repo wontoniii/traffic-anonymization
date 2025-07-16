@@ -49,6 +49,13 @@ func (tp *Reader) parseIpV6Layer(ip *layers.IPv6) (string, string, error) {
 	return srcIp, dstIp, nil
 }
 
+func isDNS(srcPort, dstPort uint16) bool {
+	if dstPort == 53 || srcPort == 53 {
+		return true
+	}
+	return false
+}
+
 // TrafficParser is the worker function for parsing network traffic. Each worker reads directly from the ring that is passed
 // The waitgroup is used to cleanly shut down. Each worker listen on the stop chan to know when to stop processing
 func (tp *Reader) Parse(wg *sync.WaitGroup, stop chan struct{}) {
@@ -63,7 +70,7 @@ func (tp *Reader) Parse(wg *sync.WaitGroup, stop chan struct{}) {
 	var isValid bool
 	var parsingErr error
 
-	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.Dns, pkt.Payload)
+	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, pkt.Eth, vlantag, pkt.Ip4, pkt.Ip6, pkt.Tcp, pkt.Udp, pkt.Payload)
 	decoded := []gopacket.LayerType{}
 	if wg != nil {
 		defer wg.Done()
@@ -117,10 +124,9 @@ loop:
 					pkt.SrcPort, pkt.DstPort, parsingErr = tp.parseUdpLayer(pkt.Udp)
 					pkt.IsUDP = true
 					isValid = true
+					pkt.IsDNS = isDNS(pkt.SrcPort, pkt.DstPort)
 				case layers.LayerTypeTLS:
 					pkt.IsTLS = true
-				case layers.LayerTypeDNS:
-					pkt.IsDNS = true
 				}
 			}
 

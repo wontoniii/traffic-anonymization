@@ -238,14 +238,6 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 		am.mu.RUnlock()
 
 		options := gopacket.SerializeOptions{}
-		if pkt.IsDNS {
-			err := pkt.Dns.SerializeTo(pkt.OutBuf, options)
-			if err != nil {
-				log.Error(err)
-				return nil
-			}
-			log.Debugf("Added dns %d", len(pkt.OutBuf.Bytes()))
-		}
 
 		if pkt.IsTCP {
 			// Check if the payload is a TLS handshake
@@ -267,8 +259,8 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 		}
 		if pkt.IsUDP {
 			// Check if the payload is a TLS handshake
-			if !pkt.IsDNS && isQUICHandshake(pkt.Udp) {
-				log.Debugf("QUIC handshake detected")
+			if pkt.IsDNS || isQUICHandshake(pkt.Udp) {
+				log.Debugf("DNS or QUIC handshake detected")
 				err := gopacket.Payload(pkt.Udp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
 				if err != nil {
 					log.Error(err)

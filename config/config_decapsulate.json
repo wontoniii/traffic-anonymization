@@ -1,6 +1,7 @@
 {
   "InInterface": {
     "Driver": "pcapread",
+    "Filter": "/home/tapuser/bpf_filter",
     "Ifname": "ens10f1"
   },
   "OutInterface": {

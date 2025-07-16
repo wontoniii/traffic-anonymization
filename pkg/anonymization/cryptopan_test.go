@@ -145,6 +145,27 @@ func TestCryptopanIPv4(t *testing.T) {
 	}
 }
 
+func TestCryptopanIPv4Random(t *testing.T) {
+	cpan, err := NewCryptoPAn(CreateRandomKey())
+	if err != nil {
+		t.Fatal("New(testKey) failed:", err)
+	}
+
+	// The vectors were pulled out by abusing awk, paste, sort and uniq.
+	// Thus ordering is different from the sample data.
+
+	for _, vec := range v4Vectors {
+		origAddr := net.ParseIP(vec.origAddr)
+		obfsAddr := net.ParseIP(vec.obfsAddr)
+		testAddr := cpan.Anonymize(origAddr)
+		if obfsAddr.Equal(testAddr) {
+			t.Errorf("%s -> %s != %s", origAddr, testAddr, obfsAddr)
+		} else {
+			t.Logf("All good: %s -> %s", origAddr, testAddr)
+		}
+	}
+}
+
 // TestCryptopanIPv6 tests against a few random IPv6 addresses, just to make
 // sure the code does not panic.
 func TestCryptopanIPv6(t *testing.T) {
