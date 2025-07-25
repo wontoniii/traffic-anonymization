@@ -21,7 +21,7 @@ start_instance() {
     
     # Use nohup to prevent the process from being killed when the script exits
     # Redirect stdout and stderr to a log file and disconnect completely with &
-    su - "$USER" -c "nohup $PROGRAM $params > /var/log/ta_${params// /_}.log 2>&1 &"
+    su - "$USER" -c "nohup $PROGRAM $params > /var/log/ta_out.log 2>&1 &"
 }
 
 # Check and restart instance 1 if needed
