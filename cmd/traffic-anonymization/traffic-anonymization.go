@@ -77,8 +77,7 @@ func main() {
 
 	amodule := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime)
 
-	var numInstances int
-	numInstances = 0
+	var numInstances int = 0
 
 	inifConfs := []config.InterfaceConfig{}
 
