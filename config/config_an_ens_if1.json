@@ -9,9 +9,9 @@
     },
     {
       "Driver": "ringread",
-      "Ifname": "ens2f0",
+      "Ifname": "ens2f1",
       "Clustered": true,
-      "ClusterID": 1,
+      "ClusterID": 2,
       "ClusterN": 14
     }
   ],
