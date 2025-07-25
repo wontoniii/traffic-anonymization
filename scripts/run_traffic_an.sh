@@ -31,9 +31,9 @@ if ! check_instance "$INSTANCE1_PARAMS"; then
 fi
 
 # Check and restart instance 2 if needed
-if ! check_instance "$INSTANCE2_PARAMS"; then
-    echo "$(date): Instance 2 not running. Restarting..." >> "$LOG_FILE"
-    start_instance "$INSTANCE2_PARAMS"
-fi
+# if ! check_instance "$INSTANCE2_PARAMS"; then
+#     echo "$(date): Instance 2 not running. Restarting..." >> "$LOG_FILE"
+#     start_instance "$INSTANCE2_PARAMS"
+# fi
 
 exit 0
