@@ -1,11 +1,11 @@
 {
-  "InInterface": {
+  "InInterfaces": [{
     "Driver": "ringread",
     "Ifname": "ens2f1",
     "Clustered": true,
     "ClusterID": 1,
     "ClusterN": 14
-  },
+  }],
   "OutInterface": {
     "Driver": "socketwrite",
     "Ifname": "140.77.15.9:38000"

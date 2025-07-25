@@ -36,7 +36,7 @@ type MiscConfig struct {
 }
 
 type SysConfig struct {
-	InIf  InterfaceConfig
+	InIf  []InterfaceConfig
 	OutIf InterfaceConfig
 	Misc  MiscConfig
 }
@@ -60,13 +60,9 @@ func (conf *SysConfig) ImportConfigFromFile(fileName string) {
 
 // loadInterfacesConfig loads the configuration from viper.
 func (conf *SysConfig) loadInterfacesConfig() {
-	conf.InIf.Driver = viper.GetString("InInterface.Driver")
-	conf.InIf.Clustered = viper.GetBool("InInterface.Clustered")
-	conf.InIf.ClusterID = viper.GetInt("InInterface.ClusterID")
-	conf.InIf.ClusterN = viper.GetInt("InInterface.ClusterN")
-	conf.InIf.ZeroCopy = viper.GetBool("InInterface.ZeroCopy")
-	conf.InIf.Ifname = viper.GetString("InInterface.Ifname")
-	conf.InIf.Filter = viper.GetString("InInterface.Filter")
+	if err := viper.UnmarshalKey("InInterfaces", &conf.InIf); err != nil {
+		panic(err)
+	}
 	conf.OutIf.Driver = viper.GetString("OutInterface.Driver")
 	conf.OutIf.Clustered = viper.GetBool("OutInterface.Clustered")
 	conf.OutIf.ClusterID = viper.GetInt("OutInterface.ClusterID")

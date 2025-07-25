@@ -1,9 +1,9 @@
 {
-  "InInterface": {
+  "InInterfaces": [{
     "Driver": "pcapread",
     "Filter": "/home/tapuser/bpf_filter",
     "Ifname": "ens10f1"
-  },
+  }],
   "OutInterface": {
     "Driver": "filebufferedwrite",
     "Ifname": "campus_traffic.pcap"

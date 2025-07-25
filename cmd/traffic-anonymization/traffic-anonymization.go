@@ -78,12 +78,40 @@ func main() {
 	amodule := anonymization.NewAModule("", conf.Misc.Anonymize, conf.Misc.PrivateNets, conf.Misc.LocalNets, conf.Misc.LoopTime)
 
 	var numInstances int
+	numInstances = 0
 
-	if conf.InIf.Clustered && conf.InIf.ClusterN > 1 && conf.InIf.Driver == "ringread" {
-		numInstances = conf.InIf.ClusterN
-	} else {
-		numInstances = 1
+	inifConfs := []config.InterfaceConfig{}
+
+	for _, inif := range conf.InIf {
+		if inif.Clustered && inif.ClusterN > 1 && inif.Driver == "ringread" {
+			for i := 0; i < inif.ClusterN; i++ {
+				inifConfs = append(inifConfs, config.InterfaceConfig{
+					Driver:    inif.Driver,
+					Clustered: inif.Clustered,
+					ClusterID: inif.ClusterID,
+					ClusterN:  inif.ClusterN,
+					ZeroCopy:  inif.ZeroCopy,
+					FanOut:    inif.FanOut,
+					Ifname:    inif.Ifname,
+					Filter:    inif.Filter,
+				})
+				numInstances++
+			}
+		} else {
+			inifConfs = append(inifConfs, config.InterfaceConfig{
+				Driver:    inif.Driver,
+				Clustered: inif.Clustered,
+				ClusterID: inif.ClusterID,
+				ClusterN:  inif.ClusterN,
+				ZeroCopy:  inif.ZeroCopy,
+				FanOut:    inif.FanOut,
+				Ifname:    inif.Ifname,
+				Filter:    inif.Filter,
+			})
+			numInstances++
+		}
 	}
+
 	stops := make([]chan struct{}, numInstances)
 	outnis := make([]*network.NetworkInterface, numInstances)
 	writers := make([]*network.Writer, numInstances)
@@ -116,14 +144,14 @@ func main() {
 		innis[i] = new(network.NetworkInterface)
 
 		ifconf = network.NetworkInterfaceConfiguration{
-			Driver:    conf.InIf.Driver,
-			Name:      conf.InIf.Ifname, // Make names unique
-			Filter:    conf.InIf.Filter,
+			Driver:    inifConfs[i].Driver,
+			Name:      inifConfs[i].Ifname, // Make names unique
+			Filter:    inifConfs[i].Filter,
 			SnapLen:   1600,
-			Clustered: conf.InIf.Clustered,
-			ClusterID: conf.InIf.ClusterID,
-			ZeroCopy:  conf.InIf.ZeroCopy,
-			FanOut:    conf.InIf.FanOut,
+			Clustered: inifConfs[i].Clustered,
+			ClusterID: inifConfs[i].ClusterID,
+			ZeroCopy:  inifConfs[i].ZeroCopy,
+			FanOut:    inifConfs[i].FanOut,
 		}
 
 		innis[i].NewNetworkInterface(ifconf)
