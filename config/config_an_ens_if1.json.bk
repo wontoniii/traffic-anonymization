@@ -5,7 +5,14 @@
       "Ifname": "ens2f0",
       "Clustered": true,
       "ClusterID": 1,
-      "ClusterN": 20
+      "ClusterN": 14
+    },
+    {
+      "Driver": "ringread",
+      "Ifname": "ens2f1",
+      "Clustered": true,
+      "ClusterID": 2,
+      "ClusterN": 14
     }
   ],
   "OutInterface": {
