@@ -12,6 +12,14 @@ import (
 	"github.com/wontoniii/traffic-anonymization/pkg/network"
 )
 
+const (
+	// MTU is the standard maximum transmission unit
+	MTU = 1500
+	// EncapsulationOverhead accounts for the outer UDP encapsulation
+	// IPv6 header (40 bytes) + UDP header (8 bytes) = 48 bytes worst case
+	EncapsulationOverhead = 48
+)
+
 // AModule
 type AModule struct {
 	// Whether to anonymize IP addresses or not
@@ -107,6 +115,14 @@ func NewAModule(key string, anonymize bool, privateNets bool, localNets []string
 func (am *AModule) Stop() error {
 	close(am.stopChan)
 	return nil
+}
+
+// maxPayloadForEncapsulation calculates the maximum payload size to ensure
+// the final encapsulated packet fits within the MTU.
+// ipHeaderSize: 20 for IPv4, 40 for IPv6
+// transportHeaderSize: TCP/UDP header size
+func maxPayloadForEncapsulation(ipHeaderSize, transportHeaderSize int) int {
+	return MTU - EncapsulationOverhead - ipHeaderSize - transportHeaderSize
 }
 
 // isTLSHandshake examines a packet to determine if it contains a TLS handshake message
@@ -243,7 +259,23 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 			// Check if the payload is a TLS handshake
 			if isTLSHandshake(pkt.Tcp) {
 				log.Debugf("TLS handshake detected")
-				err := gopacket.Payload(pkt.Tcp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
+				payload := pkt.Tcp.LayerPayload()
+
+				// Calculate maximum payload to leave room for eventual UDP encapsulation
+				ipHeaderSize := 20
+				if pkt.IsIPv6 {
+					ipHeaderSize = 40
+				}
+				tcpHeaderSize := int(pkt.Tcp.DataOffset) * 4
+				maxPayload := maxPayloadForEncapsulation(ipHeaderSize, tcpHeaderSize)
+
+				// Truncate payload if it would cause the encapsulated packet to exceed MTU
+				if len(payload) > maxPayload {
+					log.Debugf("Truncating TLS payload from %d to %d bytes for encapsulation", len(payload), maxPayload)
+					payload = payload[:maxPayload]
+				}
+
+				err := gopacket.Payload(payload).SerializeTo(pkt.OutBuf, options)
 				if err != nil {
 					log.Error(err)
 					return nil
@@ -258,10 +290,26 @@ func (am *AModule) Anonymize(pkt *network.Packet) error {
 
 		}
 		if pkt.IsUDP {
-			// Check if the payload is a TLS handshake
+			// Check if the payload is a DNS or QUIC handshake
 			if pkt.IsDNS || isQUICHandshake(pkt.Udp) {
 				log.Debugf("DNS or QUIC handshake detected")
-				err := gopacket.Payload(pkt.Udp.LayerPayload()).SerializeTo(pkt.OutBuf, options)
+				payload := pkt.Udp.LayerPayload()
+
+				// Calculate maximum payload to leave room for UDP encapsulation
+				ipHeaderSize := 20
+				if pkt.IsIPv6 {
+					ipHeaderSize = 40
+				}
+				udpHeaderSize := 8
+				maxPayload := maxPayloadForEncapsulation(ipHeaderSize, udpHeaderSize)
+
+				// Truncate payload if it would cause the encapsulated packet to exceed MTU
+				if len(payload) > maxPayload {
+					log.Debugf("Truncating UDP payload from %d to %d bytes for encapsulation", len(payload), maxPayload)
+					payload = payload[:maxPayload]
+				}
+
+				err := gopacket.Payload(payload).SerializeTo(pkt.OutBuf, options)
 				if err != nil {
 					log.Error(err)
 					return nil
